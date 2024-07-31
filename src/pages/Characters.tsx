@@ -1,17 +1,22 @@
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import axios from "axios";
-import styles from "./Characters.module.css";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import logo from "../assets/main_logo.png";
 import {
+  Box,
   CardMedia,
+  Container,
+  FormControl,
   Grid,
   InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import MainLogo from "../components/MainLogo";
+import CharacterCard from "../components/CharacterCard";
 
 interface Character {
   id: number;
@@ -29,7 +34,7 @@ interface Character {
   };
 }
 
-const Characters: React.FC = () => {
+const Characters: FC = () => {
   const [characters, setCharacters] = useState<Character[]>([]);
 
   useEffect(() => {
@@ -41,19 +46,9 @@ const Characters: React.FC = () => {
   }, []);
 
   return (
-    <>
-      <Header />
-
-      <CardMedia
-        component={"img"}
-        src={logo}
-        sx={{
-          width: "31.25rem",
-          margin: "2.3rem auto 0",
-        }}
-      />
-
-      <div className={styles.filters}>
+    <Container>
+      <MainLogo />
+      <Stack direction="row" spacing={2} justifyContent="center" mt={6}>
         <TextField
           placeholder="Filter by name..."
           InputProps={{
@@ -64,54 +59,46 @@ const Characters: React.FC = () => {
             ),
           }}
         />
-        <TextField placeholder="Species" />
-        <TextField placeholder="Gender" />
-        <TextField placeholder="Status" />
-      </div>
-      <Grid container gap={2} marginTop={"2rem"} justifyContent={"center"}>
-        {characters.map((character) => {
-          return (
-            <Grid
-              item
-              key={character.id}
-              border={"1px solid rgba(0, 0, 0, 0.14)"}
-              xs={2.5}
-              sx={{
-                borderRadius: 2,
-                width: "240px !important",
-              }}
-            >
-              <CardMedia
-                component={"img"}
-                src={character.image}
-                sx={{
-                  height: 180,
-                }}
-              />
-              <Typography
-                variant="h6"
-                fontSize={"1.25rem"}
-                fontWeight={500}
-                textAlign={"left"}
-                marginLeft={2}
-              >
-                {character.name}
-              </Typography>
-              <Typography
-                paragraph
-                fontSize={"0.875rem"}
-                color={"rgba(0, 0, 0, 0.6)"}
-                textAlign={"left"}
-                marginLeft={2}
-              >
-                {character.species}
-              </Typography>
-            </Grid>
-          );
-        })}
+        <FormControl>
+          <InputLabel htmlFor="species">Species</InputLabel>
+          <Select value="species" id="species" label="Species">
+            <MenuItem value="human">Human</MenuItem>
+            <MenuItem value="humanoid">Humanoid</MenuItem>
+            <MenuItem value="alien">Alien</MenuItem>
+            <MenuItem value="unknown">Unknown</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel htmlFor="gender">Gender</InputLabel>
+          <Select>
+            <MenuItem value="female">Female</MenuItem>
+            <MenuItem value="male">Male</MenuItem>
+            <MenuItem value="genderless">Genderless</MenuItem>
+            <MenuItem value="unknown">Unknown</MenuItem>
+          </Select>
+        </FormControl>
+        <FormControl>
+          <InputLabel htmlFor="status">Status</InputLabel>
+          <Select>
+            <MenuItem>Alive</MenuItem>
+            <MenuItem>Dead</MenuItem>
+            <MenuItem>Unknown</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
+
+      <Grid container gap={2} mt={6} justifyContent="center">
+        {characters.map((character) => (
+          <CharacterCard
+            id={character.id}
+            key={character.id}
+            image={character.image}
+            species={character.species}
+            name={character.name}
+          />
+        ))}
       </Grid>
-      <Footer />
-    </>
+    </Container>
   );
 };
 

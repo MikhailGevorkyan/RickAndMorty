@@ -1,50 +1,64 @@
-import styles from "./Header.module.css";
-import nav_logo from "../assets/logo-black.png";
-import { Link, Stack, CardMedia } from "@mui/material";
+import { Stack, CardMedia, AppBar, Toolbar, Box } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <header>
-      <nav className={styles.nav}>
-        <CardMedia
-          component={"img"}
-          src={nav_logo}
-          sx={{ height: 40, width: 40 }}
-        />
-        <Stack spacing={1} direction="row" justifyContent="center">
-          <Link
-            component={"button"}
-            underline="hover"
-            color={"black"}
-            fontFamily={"Karla"}
-            fontWeight={700}
-            fontSize={"1.125rem"}
-          >
-            Characters
-          </Link>
-          <Link
-            component={"button"}
-            underline="hover"
-            color={"black"}
-            fontFamily={"Karla"}
-            fontWeight={700}
-            fontSize={"1.125rem"}
-          >
-            Locations
-          </Link>
-          <Link
-            component={"button"}
-            underline="hover"
-            color={"black"}
-            fontFamily={"Karla"}
-            fontWeight={700}
-            fontSize={"1.125rem"}
-          >
-            Episodes
-          </Link>
-        </Stack>
-      </nav>
-    </header>
+    <Box component={"header"}>
+      <AppBar position="static">
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-around",
+            boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 8px",
+            backgroundColor: "white",
+          }}
+        >
+          <CardMedia
+            component={"img"}
+            src={"images/logo_black.png"}
+            sx={{ height: 40, width: 40 }}
+          />
+          <Stack spacing={1} direction="row" justifyContent="center" gap={2}>
+            <Link
+              to={"/"}
+              style={{
+                color: "black",
+                fontFamily: "Karla",
+                fontWeight: 700,
+                fontSize: "1.125rem",
+                textDecoration: "none",
+              }}
+            >
+              Characters
+            </Link>
+            <Link
+              to={"/locations"}
+              style={{
+                color: "black",
+                fontFamily: "Karla",
+                fontWeight: 700,
+                fontSize: "1.125rem",
+                textDecoration: "none",
+              }}
+            >
+              Locations
+            </Link>
+            <Link
+              to={"/episodes"}
+              style={{
+                color: "black",
+                fontFamily: "Karla",
+                fontWeight: 700,
+                fontSize: "1.125rem",
+                textDecoration: "none",
+              }}
+            >
+              Episodes
+            </Link>
+          </Stack>
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };
 

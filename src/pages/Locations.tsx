@@ -1,21 +1,17 @@
-import Header from "../components/Header";
-import header_logo from "../assets/rick-and-morty 1.png";
-import { CardMedia, Grid, InputAdornment, TextField } from "@mui/material";
+import LocationsLogo from "../components/LocationsLogo";
+import {
+  CardMedia,
+  Container,
+  Grid,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import Footer from "../components/Footer";
 
 const Locations = () => {
   return (
-    <>
-      <Header />
-      <CardMedia
-        component={"img"}
-        src={header_logo}
-        sx={{
-          width: 326,
-          margin: "2rem auto 0",
-        }}
-      />
+    <Container>
+      <LocationsLogo />
       <div
         style={{
           display: "flex",
@@ -37,8 +33,7 @@ const Locations = () => {
         <TextField placeholder="Type"></TextField>
         <TextField placeholder="Dimension"></TextField>
       </div>
-      <Footer />
-    </>
+    </Container>
   );
 };
 
