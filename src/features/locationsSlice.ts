@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   locations: [],
-  error: null,
 };
 
 const locationsSlice = createSlice({

@@ -1,8 +1,5 @@
-import { FC, useEffect, useState } from "react";
-import axios from "axios";
+import { FC } from "react";
 import {
-  Box,
-  CardMedia,
   Container,
   FormControl,
   Grid,
@@ -12,11 +9,14 @@ import {
   Select,
   Stack,
   TextField,
-  Typography,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import MainLogo from "../components/MainLogo";
 import CharacterCard from "../components/CharacterCard";
+import { useGetCharactersQuery } from "../features/api/apiSlice";
+import { Button } from "@mui/material";
+import AdvancedFilters from "../components/AdvancedFilters";
+import LoadMoreButton from "../components/LoadMoreButton";
 
 interface Character {
   id: number;
@@ -32,25 +32,34 @@ interface Character {
     name: string;
     url: string;
   };
+  episode: string[];
+  origin: {
+    name: string;
+    url: string;
+  };
 }
 
 const Characters: FC = () => {
-  const [characters, setCharacters] = useState<Character[]>([]);
+  const { data, isLoading, error } = useGetCharactersQuery({});
 
-  useEffect(() => {
-    (async function () {
-      await axios
-        .get("https://rickandmortyapi.com/api/character")
-        .then((response) => setCharacters(response.data.results));
-    })();
-  }, []);
+  if (isLoading) return <p>Loading...</p>;
+  if (error && error instanceof Error) {
+    console.log(error.message);
+  }
 
   return (
-    <Container>
+    <Container
+      sx={{
+        marginBottom: 13,
+      }}
+    >
       <MainLogo />
-      <Stack direction="row" spacing={2} justifyContent="center" mt={6}>
+      <Stack direction="row" spacing={3} justifyContent="center" mt={6}>
         <TextField
           placeholder="Filter by name..."
+          sx={{
+            width: { xs: "312px", md: "240px" },
+          }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -59,27 +68,75 @@ const Characters: FC = () => {
             ),
           }}
         />
-        <FormControl>
-          <InputLabel htmlFor="species">Species</InputLabel>
-          <Select value="species" id="species" label="Species">
+        <FormControl
+          sx={{
+            display: { xs: "none", md: "block" },
+            width: "240px",
+          }}
+        >
+          <InputLabel
+            htmlFor="species"
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            Species
+          </InputLabel>
+          <Select
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
             <MenuItem value="human">Human</MenuItem>
             <MenuItem value="humanoid">Humanoid</MenuItem>
             <MenuItem value="alien">Alien</MenuItem>
             <MenuItem value="unknown">Unknown</MenuItem>
           </Select>
         </FormControl>
-        <FormControl>
-          <InputLabel htmlFor="gender">Gender</InputLabel>
-          <Select>
+        <FormControl
+          sx={{
+            display: { xs: "none", md: "block" },
+            width: "240px",
+          }}
+        >
+          <InputLabel
+            htmlFor="gender"
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            Gender
+          </InputLabel>
+          <Select
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
             <MenuItem value="female">Female</MenuItem>
             <MenuItem value="male">Male</MenuItem>
             <MenuItem value="genderless">Genderless</MenuItem>
             <MenuItem value="unknown">Unknown</MenuItem>
           </Select>
         </FormControl>
-        <FormControl>
-          <InputLabel htmlFor="status">Status</InputLabel>
-          <Select>
+        <FormControl
+          sx={{
+            display: { xs: "none", md: "block" },
+            width: "240px",
+          }}
+        >
+          <InputLabel
+            htmlFor="status"
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
+            Status
+          </InputLabel>
+          <Select
+            sx={{
+              display: { xs: "none", md: "block" },
+            }}
+          >
             <MenuItem>Alive</MenuItem>
             <MenuItem>Dead</MenuItem>
             <MenuItem>Unknown</MenuItem>
@@ -87,8 +144,10 @@ const Characters: FC = () => {
         </FormControl>
       </Stack>
 
+      <AdvancedFilters />
+
       <Grid container gap={2} mt={6} justifyContent="center">
-        {characters.map((character) => (
+        {data.results.map((character: Character) => (
           <CharacterCard
             id={character.id}
             key={character.id}
@@ -98,6 +157,7 @@ const Characters: FC = () => {
           />
         ))}
       </Grid>
+      <LoadMoreButton />
     </Container>
   );
 };

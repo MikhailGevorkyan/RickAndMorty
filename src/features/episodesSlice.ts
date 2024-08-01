@@ -2,7 +2,6 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   episodes: [],
-  error: null,
 };
 
 const episodesSlice = createSlice({

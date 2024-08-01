@@ -3,6 +3,7 @@ import { apiSlice } from "./api/apiSlice";
 import charactersReducer from "./charactersSlice";
 import locationsReducer from "./locationsSlice";
 import episodesReducer from "./episodesSlice";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 export const store = configureStore({
   reducer: {
@@ -14,3 +15,5 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(apiSlice.middleware),
 });
+
+setupListeners(store.dispatch);

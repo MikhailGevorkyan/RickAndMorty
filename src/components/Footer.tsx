@@ -3,17 +3,20 @@ import { Box, Typography } from "@mui/material";
 const Footer = () => {
   return (
     <Box
-      component={"footer"}
       sx={{
         display: "flex",
+        position: "fixed",
+        bottom: 0,
+        width: "100%",
         alignItems: "center",
         justifyContent: "center",
         height: "3.7rem",
         boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 15px",
-        marginTop: "2rem",
+        backgroundColor: "white",
+        flexGrow: 1,
       }}
     >
-      <Typography fontWeight={700} fontSize={"1rem"} fontFamily={"Karla"}>
+      <Typography fontWeight={700} fontSize={"1.125rem"} fontFamily={"Karla"}>
         Make with ❤️ for the MobProgramming team
       </Typography>
     </Box>

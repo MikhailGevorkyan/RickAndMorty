@@ -18,10 +18,10 @@ const CharacterCard: FC<CharacterCardProps> = ({
     item
     key={id}
     border={"1px solid rgba(0, 0, 0, 0.14)"}
-    xs={2.5}
+    lg={2.5}
     sx={{
       borderRadius: 2,
-      width: "240px !important",
+      width: { xs: "312px", sm: "240px" },
     }}
   >
     <CardMedia
