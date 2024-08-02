@@ -16,6 +16,7 @@ import LoadMoreButton from "../components/LoadMoreButton";
 import SearchFilter from "../components/SearchFilter";
 import species from "../components/species";
 import MenuItemCard from "../components/cards/MenuItemCard";
+import { useDispatch, useSelector } from "react-redux";
 
 interface Character {
   id: number;
@@ -46,6 +47,9 @@ const Characters: FC = () => {
     name: search,
     page: pageCounter,
   });
+
+  const dispatch = useDispatch();
+  // const selector = useSelector();
 
   if (isLoading) return <p>Loading...</p>;
   if (error && error instanceof Error) {
