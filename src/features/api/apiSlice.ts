@@ -8,13 +8,49 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
   endpoints: (builder) => ({
     getCharacters: builder.query({
-      query: () => "/character",
+      query: ({ name, page = 1 }: { name: string; page: number }) =>
+        `/character/?page=${page}&name=${name}`,
+      // serializeQueryArgs: ({ endpointName }) => {
+      //   return endpointName;
+      // },
+      // // Always merge incoming data to the cache entry
+      // merge: (currentCache, newItems) => {
+      //   currentCache.push(...newItems);
+      // },
+      // // Refetch when the page arg changes
+      // forceRefetch({ currentArg, previousArg }) {
+      //   return currentArg !== previousArg;
+      // },
     }),
     getLocations: builder.query({
-      query: () => "/location",
+      query: ({ name, page = 1 }: { name: string; page: number }) =>
+        `/location/?page=${page}&name=${name}`,
+      // serializeQueryArgs: ({ endpointName }) => {
+      //   return endpointName;
+      // },
+      // // Always merge incoming data to the cache entry
+      // merge: (currentCache, newItems) => {
+      //   currentCache.push(...newItems);
+      // },
+      // // Refetch when the page arg changes
+      // forceRefetch({ currentArg, previousArg }) {
+      //   return currentArg !== previousArg;
+      // },
     }),
     getEpisodes: builder.query({
-      query: () => "/episode",
+      query: ({ name, page = 1 }: { name: string; page: number }) =>
+        `/episodes/?page=${page}&name=${name}`,
+      // serializeQueryArgs: ({ endpointName }) => {
+      //   return endpointName;
+      // },
+      // // Always merge incoming data to the cache entry
+      // merge: (currentCache, newItems) => {
+      //   currentCache.push(...newItems);
+      // },
+      // // Refetch when the page arg changes
+      // forceRefetch({ currentArg, previousArg }) {
+      //   return currentArg !== previousArg;
+      // },
     }),
   }),
 });

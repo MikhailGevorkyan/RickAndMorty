@@ -1,4 +1,4 @@
-import LocationsLogo from "../components/LocationsLogo";
+import LocationsLogo from "../components/logos/LocationsLogo";
 import {
   Box,
   Container,
@@ -11,8 +11,8 @@ import {
   TextField,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import { FC } from "react";
-import LocationCard from "../components/LocationCard";
+import { FC, useState } from "react";
+import LocationCard from "../components/cards/LocationCard";
 import { useGetLocationsQuery } from "../features/api/apiSlice";
 import { Button } from "@mui/material";
 import AdvancedFilters from "../components/AdvancedFilters";
@@ -30,7 +30,13 @@ interface Location {
 }
 
 const Locations: FC = () => {
-  const { data, isLoading, error } = useGetLocationsQuery({});
+  const [search, setSearch] = useState("");
+  const [pageCounter, setPageCounter] = useState(1);
+
+  const { data, isLoading, error } = useGetLocationsQuery({
+    name: search,
+    page: pageCounter,
+  });
 
   if (isLoading) return <p>Loading...</p>;
   if (error && error instanceof Error) {
@@ -53,14 +59,15 @@ const Locations: FC = () => {
         }}
       >
         <SearchFilter
+          setSearch={setSearch}
           placeholder="Filter by name..."
           xsWidth="19.5rem"
-          mdWidth="15rem"
+          mdWidth="20.375rem"
         />
         <FormControl
           sx={{
             display: { xs: "none", md: "block" },
-            width: "240px",
+            width: "15rem",
           }}
         >
           <InputLabel
@@ -85,7 +92,7 @@ const Locations: FC = () => {
         <FormControl
           sx={{
             display: { xs: "none", md: "block" },
-            width: "240px",
+            width: "15rem",
           }}
         >
           <InputLabel
@@ -110,16 +117,20 @@ const Locations: FC = () => {
 
       <AdvancedFilters />
 
-      <Grid container gap={7} mt={6} justifyContent="center">
+      <Grid container gap={8} mt={6} justifyContent="center">
         {data.results.map((location: Location) => (
           <LocationCard
+            key={location.id}
             id={location.id}
             name={location.name}
             type={location.type}
           />
         ))}
       </Grid>
-      <LoadMoreButton />
+      <LoadMoreButton
+        pageCounter={pageCounter}
+        setPageCounter={setPageCounter}
+      />
     </Container>
   );
 };

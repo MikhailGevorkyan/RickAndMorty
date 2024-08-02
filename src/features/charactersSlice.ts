@@ -8,12 +8,12 @@ const charactersSlice = createSlice({
   name: "characters",
   initialState,
   reducers: {
-    getNextPage: (state, action) => {
+    updateCharacters: (state, action) => {
       state.characters = action.payload;
     },
   },
 });
 
-export const { getNextPage } = charactersSlice.actions;
+export const { updateCharacters } = charactersSlice.actions;
 
 export default charactersSlice.reducer;

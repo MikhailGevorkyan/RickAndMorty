@@ -11,7 +11,7 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
-  width: 240,
+  width: 250,
   height: 128,
   padding: theme.spacing(2),
   ...theme.typography.body2,

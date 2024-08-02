@@ -1,14 +1,7 @@
-import {
-  Stack,
-  CardMedia,
-  AppBar,
-  Toolbar,
-  Box,
-  IconButton,
-} from "@mui/material";
+import { Stack, CardMedia, AppBar, Toolbar, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import MenuDrawer from "./MenuDrawer";
 
 const Header: React.FC = () => {
   return (
@@ -17,7 +10,7 @@ const Header: React.FC = () => {
         <Toolbar
           sx={{
             display: "flex",
-            justifyContent: "space-around",
+            justifyContent: { xs: "space-between", md: "space-around" },
             boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 8px",
             backgroundColor: "white",
           }}
@@ -76,15 +69,7 @@ const Header: React.FC = () => {
               display: { xs: "block", sm: "none" },
             }}
           >
-            <IconButton
-              size="large"
-              edge="start"
-              color="default"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
+            <MenuDrawer />
           </Box>
         </Toolbar>
       </AppBar>

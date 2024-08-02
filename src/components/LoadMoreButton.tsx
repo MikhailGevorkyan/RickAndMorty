@@ -1,6 +1,11 @@
 import { Button } from "@mui/material";
 
-const LoadMoreButton = () => (
+interface PageCounterProps {
+  pageCounter: number;
+  setPageCounter: (pageCounter: number) => void;
+}
+
+const LoadMoreButton = ({ pageCounter, setPageCounter }: PageCounterProps) => (
   <Button
     variant="contained"
     sx={{
@@ -10,6 +15,7 @@ const LoadMoreButton = () => (
       width: "9.625rem",
       boxShadow: "0px 6px 10px 0px rgba(0, 0, 0, 0.14)",
     }}
+    onClick={() => setPageCounter(pageCounter + 1)}
   >
     Load More
   </Button>

@@ -1,8 +1,8 @@
 import { Box, Container, Grid, InputAdornment, TextField } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import EpisodesLogo from "../components/EpisodesLogo";
-import { FC } from "react";
-import EpisodeCard from "../components/EpisodeCard";
+import EpisodesLogo from "../components/logos/EpisodesLogo";
+import { FC, useState } from "react";
+import EpisodeCard from "../components/cards/EpisodeCard";
 import { useGetEpisodesQuery } from "../features/api/apiSlice";
 import { Button } from "@mui/material";
 import LoadMoreButton from "../components/LoadMoreButton";
@@ -19,7 +19,13 @@ interface Episode {
 }
 
 const Episodes: FC = () => {
-  const { data, isLoading, error } = useGetEpisodesQuery({});
+  const [search, setSearch] = useState("");
+  const [pageCounter, setPageCounter] = useState(1);
+
+  const { data, isLoading, error } = useGetEpisodesQuery({
+    name: search,
+    page: pageCounter,
+  });
 
   if (isLoading) return <p>Loading...</p>;
   if (error && error instanceof Error) {
@@ -34,6 +40,7 @@ const Episodes: FC = () => {
     >
       <EpisodesLogo />
       <SearchFilter
+        setSearch={setSearch}
         placeholder="Filter by name or episode (ex. S01)"
         xsWidth="17.5rem"
         mdWidth="25rem"
@@ -50,7 +57,10 @@ const Episodes: FC = () => {
           />
         ))}
       </Grid>
-      <LoadMoreButton />
+      <LoadMoreButton
+        pageCounter={pageCounter}
+        setPageCounter={setPageCounter}
+      />
     </Container>
   );
 };

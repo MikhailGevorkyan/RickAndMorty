@@ -1,22 +1,21 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import {
   Container,
   FormControl,
   Grid,
-  InputAdornment,
   InputLabel,
   MenuItem,
   Select,
   Stack,
-  TextField,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import MainLogo from "../components/MainLogo";
-import CharacterCard from "../components/CharacterCard";
+import MainLogo from "../components/logos/MainLogo";
+import CharacterCard from "../components/cards/CharacterCard";
 import { useGetCharactersQuery } from "../features/api/apiSlice";
 import AdvancedFilters from "../components/AdvancedFilters";
 import LoadMoreButton from "../components/LoadMoreButton";
 import SearchFilter from "../components/SearchFilter";
+import species from "../components/species";
+import MenuItemCard from "../components/cards/MenuItemCard";
 
 interface Character {
   id: number;
@@ -40,7 +39,13 @@ interface Character {
 }
 
 const Characters: FC = () => {
-  const { data, isLoading, error } = useGetCharactersQuery({});
+  const [search, setSearch] = useState("");
+  const [pageCounter, setPageCounter] = useState(1);
+
+  const { data, isLoading, error } = useGetCharactersQuery({
+    name: search,
+    page: pageCounter,
+  });
 
   if (isLoading) return <p>Loading...</p>;
   if (error && error instanceof Error) {
@@ -56,6 +61,7 @@ const Characters: FC = () => {
       <MainLogo />
       <Stack direction="row" spacing={3} justifyContent="center" mt={6}>
         <SearchFilter
+          setSearch={setSearch}
           placeholder="Filter by name..."
           xsWidth="19.5rem"
           mdWidth="15rem"
@@ -79,10 +85,13 @@ const Characters: FC = () => {
               display: { xs: "none", md: "block" },
             }}
           >
-            <MenuItem value="human">Human</MenuItem>
-            <MenuItem value="humanoid">Humanoid</MenuItem>
-            <MenuItem value="alien">Alien</MenuItem>
-            <MenuItem value="unknown">Unknown</MenuItem>
+            {species.map((species) => (
+              <MenuItemCard
+                key={species.id}
+                name={species.name}
+                id={species.id}
+              />
+            ))}
           </Select>
         </FormControl>
         <FormControl
@@ -129,9 +138,9 @@ const Characters: FC = () => {
               display: { xs: "none", md: "block" },
             }}
           >
-            <MenuItem>Alive</MenuItem>
-            <MenuItem>Dead</MenuItem>
-            <MenuItem>Unknown</MenuItem>
+            <MenuItem value="alive">Alive</MenuItem>
+            <MenuItem value="dead">Dead</MenuItem>
+            <MenuItem value="unknown">Unknown</MenuItem>
           </Select>
         </FormControl>
       </Stack>
@@ -149,7 +158,10 @@ const Characters: FC = () => {
           />
         ))}
       </Grid>
-      <LoadMoreButton />
+      <LoadMoreButton
+        pageCounter={pageCounter}
+        setPageCounter={setPageCounter}
+      />
     </Container>
   );
 };
