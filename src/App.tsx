@@ -4,6 +4,8 @@ import Layout from "./components/Layout";
 import { Route, Routes } from "react-router-dom";
 import Locations from "./pages/Locations";
 import Episodes from "./pages/Episodes";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -11,6 +13,7 @@ function App() {
       className="App"
       style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
     >
+      <Header />
       <Layout>
         <Routes>
           <Route path="/" element={<Characters />} />
@@ -18,6 +21,7 @@ function App() {
           <Route path="/episodes" element={<Episodes />} />
         </Routes>
       </Layout>
+      <Footer />
     </div>
   );
 }

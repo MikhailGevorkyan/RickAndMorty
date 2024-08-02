@@ -6,6 +6,7 @@ import EpisodeCard from "../components/EpisodeCard";
 import { useGetEpisodesQuery } from "../features/api/apiSlice";
 import { Button } from "@mui/material";
 import LoadMoreButton from "../components/LoadMoreButton";
+import SearchFilter from "../components/SearchFilter";
 
 interface Episode {
   id: number;
@@ -32,19 +33,10 @@ const Episodes: FC = () => {
       }}
     >
       <EpisodesLogo />
-      <TextField
-        placeholder="Filter by name or episode (ex. S01 or S01E02)"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          marginTop: "1rem",
-          width: "25rem",
-        }}
+      <SearchFilter
+        placeholder="Filter by name or episode (ex. S01)"
+        xsWidth="17.5rem"
+        mdWidth="25rem"
       />
 
       <Grid container gap={6} mt={6} justifyContent="center">

@@ -9,15 +9,8 @@ import {
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
-import { Dispatch, SetStateAction } from "react";
 
-interface HeaderProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const Header: React.FC<HeaderProps> = ({ setOpen, open }) => {
-  console.log(open);
+const Header: React.FC = () => {
   return (
     <Box component={"header"}>
       <AppBar position="static">
@@ -89,9 +82,8 @@ const Header: React.FC<HeaderProps> = ({ setOpen, open }) => {
               color="default"
               aria-label="menu"
               sx={{ mr: 2 }}
-              onClick={() => setOpen(!open)}
             >
-              {open ? <CloseIcon /> : <MenuIcon />}
+              <MenuIcon />
             </IconButton>
           </Box>
         </Toolbar>

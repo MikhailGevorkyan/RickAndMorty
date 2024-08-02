@@ -1,5 +1,6 @@
 import LocationsLogo from "../components/LocationsLogo";
 import {
+  Box,
   Container,
   FormControl,
   Grid,
@@ -16,6 +17,7 @@ import { useGetLocationsQuery } from "../features/api/apiSlice";
 import { Button } from "@mui/material";
 import AdvancedFilters from "../components/AdvancedFilters";
 import LoadMoreButton from "../components/LoadMoreButton";
+import SearchFilter from "../components/SearchFilter";
 
 interface Location {
   id: number;
@@ -42,26 +44,18 @@ const Locations: FC = () => {
       }}
     >
       <LocationsLogo />
-      <div
-        style={{
+      <Box
+        sx={{
           display: "flex",
           justifyContent: "center",
           gap: "1rem",
           marginTop: "2rem",
         }}
       >
-        <TextField
+        <SearchFilter
           placeholder="Filter by name..."
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          sx={{
-            width: "326px",
-          }}
+          xsWidth="19.5rem"
+          mdWidth="15rem"
         />
         <FormControl
           sx={{
@@ -112,7 +106,7 @@ const Locations: FC = () => {
             <MenuItem value="unknown">Unknown</MenuItem>
           </Select>
         </FormControl>
-      </div>
+      </Box>
 
       <AdvancedFilters />
 

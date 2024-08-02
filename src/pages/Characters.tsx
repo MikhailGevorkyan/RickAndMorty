@@ -14,9 +14,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import MainLogo from "../components/MainLogo";
 import CharacterCard from "../components/CharacterCard";
 import { useGetCharactersQuery } from "../features/api/apiSlice";
-import { Button } from "@mui/material";
 import AdvancedFilters from "../components/AdvancedFilters";
 import LoadMoreButton from "../components/LoadMoreButton";
+import SearchFilter from "../components/SearchFilter";
 
 interface Character {
   id: number;
@@ -55,18 +55,10 @@ const Characters: FC = () => {
     >
       <MainLogo />
       <Stack direction="row" spacing={3} justifyContent="center" mt={6}>
-        <TextField
+        <SearchFilter
           placeholder="Filter by name..."
-          sx={{
-            width: { xs: "312px", md: "240px" },
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
+          xsWidth="19.5rem"
+          mdWidth="15rem"
         />
         <FormControl
           sx={{
