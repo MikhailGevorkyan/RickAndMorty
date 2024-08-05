@@ -1,36 +1,31 @@
-import { Box, Container, Grid, InputAdornment, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { Container, Grid, Typography } from "@mui/material";
 import EpisodesLogo from "../components/logos/EpisodesLogo";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import EpisodeCard from "../components/cards/EpisodeCard";
 import { useGetEpisodesQuery } from "../features/api/apiSlice";
-import { Button } from "@mui/material";
-import LoadMoreButton from "../components/LoadMoreButton";
+import LoadMoreButton from "../components/buttons/LoadMoreButton";
 import SearchFilter from "../components/SearchFilter";
-
-interface Episode {
-  id: number;
-  name: string;
-  air_date: string;
-  episode: string;
-  characters: string[];
-  url: string;
-  created: string;
-}
+import type { Episode } from "../components/interfaces/projectInterfaces";
 
 const Episodes: FC = () => {
   const [search, setSearch] = useState("");
   const [pageCounter, setPageCounter] = useState(1);
+  const [filtersChanged, setFiltersChanged] = useState(false);
 
-  const { data, isLoading, error } = useGetEpisodesQuery({
+  const {
+    data: episodes,
+    isLoading,
+    error,
+  } = useGetEpisodesQuery({
     name: search,
     page: pageCounter,
   });
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error && error instanceof Error) {
-    console.log(error.message);
-  }
+  useEffect(() => {
+    if (filtersChanged) {
+      setFiltersChanged(false);
+    }
+  }, [search]);
 
   return (
     <Container
@@ -47,15 +42,27 @@ const Episodes: FC = () => {
       />
 
       <Grid container gap={6} mt={6} justifyContent="center">
-        {data.results.map((episode: Episode) => (
-          <EpisodeCard
-            key={episode.id}
-            id={episode.id}
-            name={episode.name}
-            air_date={episode.air_date}
-            episode={episode.episode}
-          />
-        ))}
+        {isLoading ? (
+          <Typography variant="h4" mt={4}>
+            Loading episodes...
+          </Typography>
+        ) : error ? (
+          <Typography variant="h4" mt={4} color="error">
+            No episodes were found matching the search request.
+          </Typography>
+        ) : episodes && episodes.results && episodes.results.length > 0 ? (
+          episodes.results.map((episode: Episode) => (
+            <EpisodeCard key={episode.id} data={episode} />
+          ))
+        ) : (
+          !isLoading &&
+          !error &&
+          search && (
+            <Typography variant="h4" mt={4}>
+              No episodes were found matching the search request.
+            </Typography>
+          )
+        )}
       </Grid>
       <LoadMoreButton
         pageCounter={pageCounter}

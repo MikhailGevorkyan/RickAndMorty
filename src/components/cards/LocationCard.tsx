@@ -1,10 +1,10 @@
 import { Grid, Paper, styled, Typography } from "@mui/material";
 import { FC } from "react";
+import type { Location } from "../interfaces/projectInterfaces";
+import { Link } from "react-router-dom";
 
 interface LocationCardProps {
-  id: number;
-  name: string;
-  type: string;
+  data: Location;
 }
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
@@ -19,16 +19,21 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
   background: "rgba(250, 250, 250, 1)",
 }));
 
-const LocationCard: FC<LocationCardProps> = ({ id, name, type }) => (
-  <Grid item key={id} border={"1px solid rgba(0, 0, 0, 0.14)"} lg={2.5}>
-    <DemoPaper>
-      <Typography fontWeight={500} fontSize={"1.25rem"}>
-        {name}
-      </Typography>
-      <Typography fontSize={"0.875rem"} color={"rgba(0, 0, 0, 0.6)"}>
-        {type}
-      </Typography>
-    </DemoPaper>
+const LocationCard: FC<LocationCardProps> = ({ data }) => (
+  <Grid item border={"1px solid rgba(0, 0, 0, 0.14)"} lg={2.5}>
+    <Link
+      to={`/location/${data.id}`}
+      style={{ textDecoration: "none", color: "black" }}
+    >
+      <DemoPaper>
+        <Typography fontWeight={500} fontSize={"1.25rem"}>
+          {data.name}
+        </Typography>
+        <Typography fontSize={"0.875rem"} color={"rgba(0, 0, 0, 0.6)"}>
+          {data.type}
+        </Typography>
+      </DemoPaper>
+    </Link>
   </Grid>
 );
 

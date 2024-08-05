@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Character } from "../components/interfaces/projectInterfaces";
 
-const initialState = {
+const initialState: { characters: Character[] } = {
   characters: [],
 };
 
@@ -8,7 +9,7 @@ const charactersSlice = createSlice({
   name: "characters",
   initialState,
   reducers: {
-    updateCharacters: (state, action) => {
+    updateCharacters: (state, action: { payload: Character[] }) => {
       state.characters = action.payload;
     },
   },

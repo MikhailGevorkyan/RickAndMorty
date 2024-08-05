@@ -1,46 +1,42 @@
 const species = [
   {
     id: 1,
-    name: "All",
-  },
-  {
-    id: 2,
     name: "Human",
   },
   {
-    id: 3,
+    id: 2,
     name: "Humanoid",
   },
   {
-    id: 4,
+    id: 3,
     name: "Alien",
   },
   {
-    id: 5,
+    id: 4,
     name: "Mythological Creature",
   },
   {
-    id: 6,
+    id: 5,
     name: "Cronenberg",
   },
   {
-    id: 7,
+    id: 6,
     name: "Robot",
   },
   {
-    id: 8,
+    id: 7,
     name: "Poopybutthole",
   },
   {
-    id: 9,
+    id: 8,
     name: "Animal",
   },
   {
-    id: 10,
+    id: 9,
     name: "Disease",
   },
   {
-    id: 11,
+    id: 10,
     name: "Unknown",
   },
 ];

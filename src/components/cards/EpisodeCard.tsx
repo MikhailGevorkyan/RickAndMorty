@@ -1,11 +1,10 @@
 import { Grid, Paper, styled, Typography } from "@mui/material";
 import { FC } from "react";
+import { Episode } from "../interfaces/projectInterfaces";
+import { Link } from "react-router-dom";
 
 interface EpisodeCardProps {
-  id: number;
-  name: string;
-  air_date: string;
-  episode: string;
+  data: Episode;
 }
 
 const DemoPaper = styled(Paper)(({ theme }) => ({
@@ -21,23 +20,28 @@ const DemoPaper = styled(Paper)(({ theme }) => ({
   gap: 5,
 }));
 
-const EpisodeCard: FC<EpisodeCardProps> = ({ id, name, air_date, episode }) => (
-  <Grid item key={id} border={"1px solid rgba(0, 0, 0, 0.14)"} lg={2.5}>
-    <DemoPaper>
-      <Typography fontWeight={500} fontSize={"1.25rem"}>
-        {name}
-      </Typography>
-      <Typography fontSize={"0.875rem"} color={"rgba(0, 0, 0, 0.6)"}>
-        {air_date}
-      </Typography>
-      <Typography
-        color={"rgba(0, 0, 0, 0.6)"}
-        fontWeight={700}
-        fontSize={"0.875rem"}
-      >
-        {episode}
-      </Typography>
-    </DemoPaper>
+const EpisodeCard: FC<EpisodeCardProps> = ({ data }) => (
+  <Grid item border={"1px solid rgba(0, 0, 0, 0.14)"} lg={2.5}>
+    <Link
+      to={`/episode/${data.id}`}
+      style={{ textDecoration: "none", color: "black" }}
+    >
+      <DemoPaper>
+        <Typography fontWeight={500} fontSize={"1.25rem"}>
+          {data.name}
+        </Typography>
+        <Typography fontSize={"0.875rem"} color={"rgba(0, 0, 0, 0.6)"}>
+          {data.air_date}
+        </Typography>
+        <Typography
+          color={"rgba(0, 0, 0, 0.6)"}
+          fontWeight={700}
+          fontSize={"0.875rem"}
+        >
+          {data.episode}
+        </Typography>
+      </DemoPaper>
+    </Link>
   </Grid>
 );
 

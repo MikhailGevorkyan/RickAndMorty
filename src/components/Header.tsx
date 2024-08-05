@@ -1,6 +1,5 @@
 import { Stack, CardMedia, AppBar, Toolbar, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import MenuDrawer from "./MenuDrawer";
 
 const Header: React.FC = () => {
@@ -15,11 +14,14 @@ const Header: React.FC = () => {
             backgroundColor: "white",
           }}
         >
-          <CardMedia
-            component={"img"}
-            src={"images/logo_black.png"}
-            sx={{ height: 40, width: 40 }}
-          />
+          <Link to={"/"}>
+            <CardMedia
+              component={"img"}
+              image="/images/logo_black.png"
+              sx={{ height: 40, width: 40 }}
+            />
+          </Link>
+
           <Box
             sx={{
               display: { sm: "block", xs: "none" },
