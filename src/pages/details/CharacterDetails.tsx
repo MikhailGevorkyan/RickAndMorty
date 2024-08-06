@@ -1,4 +1,11 @@
-import { Avatar, Container, Divider, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Container,
+  Divider,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { FC } from "react";
 import {
   useGetCharacterByIdQuery,
@@ -10,6 +17,7 @@ import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import GoBackButton from "../../components/buttons/GoBackButton";
 import { Episode } from "../../components/interfaces/projectInterfaces";
 import DetailedEpisodeCard from "../../components/cards/DetailedEpisodeCard";
+import LoadingIcon from "../../components/logos/LoadingIcon";
 
 const CharacterDetails: FC = () => {
   const { id } = useParams();
@@ -28,65 +36,70 @@ const CharacterDetails: FC = () => {
     characterEpisodes || null
   );
 
-  if (isLoading || loadEpisodes) return <h1>Loading...</h1>;
+  if (isLoading || loadEpisodes) return <LoadingIcon />;
   if (error) return <h1>Error...</h1>;
   if (!character) return <h1>Empty character...</h1>;
   if (!episodes) return <h1>Empty episodes...</h1>;
 
   return (
     <Container sx={{ mb: "7rem" }}>
-      <Stack
-        alignItems={"center"}
-        direction={"row"}
-        justifyContent={"space-evenly"}
+      <Box
+        sx={{
+          position: "absolute",
+          left: { xs: "5%", md: "20%" },
+          top: { xs: "8%", md: "10%" },
+        }}
       >
         <GoBackButton name="characters" />
+      </Box>
+
+      <Stack
+        sx={{
+          flexDirection: { md: "row" },
+          alignItems: "center",
+          justifyContent: "center",
+          mt: "2rem",
+        }}
+      >
         <Stack>
           <Avatar
             alt={`${character.name} Avatar`}
             src={character.image}
             draggable="false"
-            sx={{ width: 350, height: 350, mt: 3, border: "6px solid #e9eff0" }}
+            sx={{
+              width: { xs: 148, md: 350 },
+              height: { xs: 148, md: 350 },
+              mt: 3,
+              border: "6px solid #e9eff0",
+            }}
           />
-          <Typography variant="h1" fontSize={"3rem"} mt={1} fontWeight={400}>
+          <Typography
+            variant="h1"
+            fontSize={{ xs: "2rem", md: "3rem" }}
+            mt={1}
+            fontWeight={400}
+          >
             {character.name}
           </Typography>
         </Stack>
       </Stack>
-      <Stack
-        mt={5}
-        justifyContent={"space-evenly"}
-        flexDirection={"row"}
-        gap={5}
-      >
-        <Typography
-          variant="h6"
-          color={"#8E8E93"}
-          fontSize={"1.25rem"}
-          fontWeight={500}
-          mt={5}
-          textAlign={"start"}
-        >
-          Informations
-        </Typography>
-        <Typography
-          variant="h6"
-          color={"#8E8E93"}
-          fontSize={"1.25rem"}
-          fontWeight={500}
-          mt={5}
-          ml={28}
-          textAlign={"start"}
-        >
-          Episodes
-        </Typography>
-      </Stack>
-      <Stack mt={3} direction={"row"}>
-        <Stack>
+      <Stack mt={"2rem"} direction={{ xs: "column", md: "row" }}>
+        <Stack mb="3rem">
+          <Typography
+            sx={{
+              color: "#8E8E93",
+              fontSize: "1.25rem",
+              fontWeight: 500,
+              mb: "1rem",
+              textAlign: { xs: "start", sm: "inherit" },
+            }}
+          >
+            Informations
+          </Typography>
           <Stack
             sx={{
               textAlign: "start",
-              ml: 30,
+              ml: { xs: 2, md: 30 },
             }}
           >
             <Typography
@@ -112,15 +125,15 @@ const CharacterDetails: FC = () => {
             sx={{
               mt: 1,
               mb: 1,
-              ml: 30,
-              width: "24.625rem",
+              ml: { xs: 2, md: 30 },
+              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
               height: "1px",
             }}
           />
           <Stack
             sx={{
               textAlign: "start",
-              ml: 30,
+              ml: { xs: 2, md: 30 },
             }}
           >
             <Typography
@@ -146,15 +159,15 @@ const CharacterDetails: FC = () => {
             sx={{
               mt: 1,
               mb: 1,
-              ml: 30,
-              width: "24.625rem",
+              ml: { xs: 3, md: 30 },
+              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
               height: "1px",
             }}
           />
           <Stack
             sx={{
               textAlign: "start",
-              ml: 30,
+              ml: { xs: 2, md: 30 },
             }}
           >
             <Typography
@@ -180,15 +193,15 @@ const CharacterDetails: FC = () => {
             sx={{
               mt: 1,
               mb: 1,
-              ml: 30,
-              width: "24.625rem",
+              ml: { xs: 3, md: 30 },
+              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
               height: "1px",
             }}
           />
           <Stack
             sx={{
               textAlign: "start",
-              ml: 30,
+              ml: { xs: 2, md: 30 },
             }}
           >
             <Typography
@@ -215,15 +228,15 @@ const CharacterDetails: FC = () => {
             sx={{
               mt: 1,
               mb: 1,
-              ml: 30,
-              width: "24.625rem",
+              ml: { xs: 3, md: 30 },
+              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
               height: "1px",
             }}
           />
           <Stack
             sx={{
               textAlign: "start",
-              ml: 30,
+              ml: { xs: 2, md: 30 },
             }}
           >
             <Typography
@@ -249,8 +262,8 @@ const CharacterDetails: FC = () => {
             sx={{
               mt: 1,
               mb: 1,
-              ml: 30,
-              width: "24.625rem",
+              ml: { xs: 2, md: 30 },
+              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
               height: "1px",
             }}
           />
@@ -262,7 +275,7 @@ const CharacterDetails: FC = () => {
             <Stack
               sx={{
                 textAlign: "start",
-                ml: 30,
+                ml: { xs: 2, md: 30 },
               }}
             >
               <Typography
@@ -298,21 +311,32 @@ const CharacterDetails: FC = () => {
             sx={{
               mt: 1,
               mb: 1,
-              ml: 30,
-              width: "24.625rem",
+              ml: { xs: 2, md: 30 },
+              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
               height: "1px",
             }}
           />
         </Stack>
         <Stack
           sx={{
-            ml: "12.5rem",
+            ml: { md: "12.5rem" },
           }}
         >
+          <Typography
+            variant="h6"
+            color={"#8E8E93"}
+            fontSize={"1.25rem"}
+            fontWeight={500}
+            textAlign={"start"}
+            mb={"1rem"}
+          >
+            Episodes
+          </Typography>
           <Stack
             sx={{
               textAlign: "start",
               gap: 0.3,
+              ml: { xs: 2 },
             }}
           >
             {Array.isArray(episodes) ? (

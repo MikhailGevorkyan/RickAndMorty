@@ -6,6 +6,7 @@ import { useGetEpisodesQuery } from "../features/api/apiSlice";
 import LoadMoreButton from "../components/buttons/LoadMoreButton";
 import SearchFilter from "../components/SearchFilter";
 import type { Episode } from "../components/interfaces/projectInterfaces";
+import LoadingIcon from "../components/logos/LoadingIcon";
 
 const Episodes: FC = () => {
   const [search, setSearch] = useState("");
@@ -43,9 +44,7 @@ const Episodes: FC = () => {
 
       <Grid container gap={6} mt={6} justifyContent="center">
         {isLoading ? (
-          <Typography variant="h4" mt={4}>
-            Loading episodes...
-          </Typography>
+          <LoadingIcon />
         ) : error ? (
           <Typography variant="h4" mt={4} color="error">
             No episodes were found matching the search request.

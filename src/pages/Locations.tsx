@@ -6,6 +6,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
   Typography,
@@ -13,12 +14,13 @@ import {
 import { FC, useEffect, useState } from "react";
 import LocationCard from "../components/cards/LocationCard";
 import { useGetLocationsQuery } from "../features/api/apiSlice";
-import AdvancedFilters from "../components/AdvancedFilters";
+import AdvancedFiltersLocations from "../components/AdvancedFiltersLocations";
 import LoadMoreButton from "../components/buttons/LoadMoreButton";
 import SearchFilter from "../components/SearchFilter";
 import type { Location } from "../components/interfaces/projectInterfaces";
 import locationTypes from "../components/filterData/locationTypes";
 import locationDimensions from "../components/filterData/locationDimensions";
+import LoadingIcon from "../components/logos/LoadingIcon";
 
 const Locations: FC = () => {
   const [search, setSearch] = useState("");
@@ -92,10 +94,14 @@ const Locations: FC = () => {
           <Select
             value={typesFilter}
             onChange={(e) => handleTypesChange(e)}
+            input={<OutlinedInput label="Type" />}
             sx={{
               display: { xs: "none", md: "block" },
             }}
           >
+            <MenuItem value="">
+              <em>All</em>
+            </MenuItem>
             {locationTypes.map((type) => (
               <MenuItem key={type.id} value={type.name}>
                 {type.name}
@@ -119,11 +125,15 @@ const Locations: FC = () => {
           </InputLabel>
           <Select
             value={dimensionsFilter}
+            input={<OutlinedInput label="Dimension" />}
             onChange={(e) => handleDimensionsChange(e)}
             sx={{
               display: { xs: "none", md: "block" },
             }}
           >
+            <MenuItem value="">
+              <em>All</em>
+            </MenuItem>
             {locationDimensions.map((dimension) => (
               <MenuItem key={dimension.id} value={dimension.name}>
                 {dimension.name}
@@ -133,11 +143,15 @@ const Locations: FC = () => {
         </FormControl>
       </Box>
 
-      <AdvancedFilters />
+      <AdvancedFiltersLocations
+        setTypesFilter={setTypesFilter}
+        setDimensionsFilter={setDimensionsFilter}
+        setFiltersChanged={setFiltersChanged}
+      />
 
       <Grid container gap={8} mt={6} justifyContent="center">
         {isLoading ? (
-          <Typography variant="h4">Loading locations...</Typography>
+          <LoadingIcon />
         ) : error ? (
           <Typography variant="h4">
             No locations were found matching the selected filters.

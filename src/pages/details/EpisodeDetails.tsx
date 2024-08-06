@@ -4,10 +4,11 @@ import {
   useGetCharactersByIdQuery,
   useGetEpisodeByIdQuery,
 } from "../../features/api/apiSlice";
-import { Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import GoBackButton from "../../components/buttons/GoBackButton";
 import CharacterCard from "../../components/cards/CharacterCard";
 import { Character } from "../../components/interfaces/projectInterfaces";
+import LoadingIcon from "../../components/logos/LoadingIcon";
 
 const EpisodeDetails: FC = () => {
   const { id } = useParams();
@@ -25,36 +26,49 @@ const EpisodeDetails: FC = () => {
   const { data: characters, isLoading: loadCharacters } =
     useGetCharactersByIdQuery(episodeCharacters || null);
 
-  if (isLoading || loadCharacters) return <h1>Loading...</h1>;
+  if (isLoading || loadCharacters) return <LoadingIcon />;
   if (error) return <h1>Error...</h1>;
   if (!episode) return <h1>Empty data</h1>;
   if (!characters) return <h1>Empty characters...</h1>;
 
   return (
     <Container sx={{ mb: "7rem" }}>
-      <Stack
-        direction={"row"}
-        justifyContent={"space-around"}
-        alignItems={"center"}
-        mt={"2rem"}
+      <Box
+        sx={{
+          position: "absolute",
+          left: { xs: "5%", md: "20%" },
+          top: { xs: "8%", md: "10%" },
+        }}
       >
         <GoBackButton name="episodes" />
+      </Box>
+      <Stack
+        sx={{
+          flexDirection: { sm: "row" },
+          justifyContent: "space-around",
+          alignItems: "center",
+          mt: "2.5rem",
+        }}
+      >
         <Typography
           variant="h1"
           sx={{
             fontSize: "2.25rem",
             fontWeight: 400,
-            m: "0 auto",
+            m: "1rem auto 0",
           }}
         >
           {episode.name}
         </Typography>
       </Stack>
       <Stack
-        direction={"row"}
-        justifyContent={"center"}
-        gap={"10rem"}
-        mt={"2rem"}
+        sx={{
+          flexDirection: "row",
+          mt: "2rem",
+          justifyContent: "center",
+          textAlign: "start",
+          gap: { xs: "3rem", md: "10rem" },
+        }}
       >
         <Stack textAlign={"start"}>
           <Typography sx={{ fontWeight: 700 }}>Episode</Typography>

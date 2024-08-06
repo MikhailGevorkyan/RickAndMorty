@@ -3,11 +3,12 @@ import {
   useGetCharactersByIdQuery,
   useGetLocationByIdQuery,
 } from "../../features/api/apiSlice";
-import { Container, Grid, Stack, Typography } from "@mui/material";
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import GoBackButton from "../../components/buttons/GoBackButton";
 import { Character } from "../../components/interfaces/projectInterfaces";
 import CharacterCard from "../../components/cards/CharacterCard";
 import { FC } from "react";
+import LoadingIcon from "../../components/logos/LoadingIcon";
 
 const LocationDetails: FC = () => {
   const { id } = useParams();
@@ -26,28 +27,41 @@ const LocationDetails: FC = () => {
   const { data: characters, isLoading: loadCharacters } =
     useGetCharactersByIdQuery(locationResidents || null);
 
-  if (isLoading || loadCharacters) return <h1>Loading...</h1>;
+  if (isLoading || loadCharacters) return <LoadingIcon />;
   if (error) return <h1>Error...</h1>;
   if (!location) return <h1>Empty location...</h1>;
   if (!characters) return <h1>Empty characters...</h1>;
 
+  console.log(Array.isArray(characters));
+  console.log(!characters.length);
+  console.log(location);
+
   return (
     <Container sx={{ mb: "7rem" }}>
-      <Stack
-        direction={"row"}
-        justifyContent={"space-around"}
-        alignItems={"center"}
-        mt={"2rem"}
-        sx={{}}
+      <Box
+        sx={{
+          position: "absolute",
+          left: { xs: "5%", md: "20%" },
+          top: { xs: "8%", md: "10%" },
+        }}
       >
         <GoBackButton name="locations" />
+      </Box>
+      <Stack
+        sx={{
+          flexDirection: { sm: "row" },
+          justifyContent: "space-around",
+          alignItems: "center",
+          mt: "3rem",
+        }}
+      >
         <Typography
           variant="h1"
           sx={{
             mt: "2rem",
             fontSize: "2.25rem",
             fontWeight: 400,
-            m: "0 auto",
+            m: "1rem auto auto",
           }}
         >
           {location.name}
@@ -55,12 +69,13 @@ const LocationDetails: FC = () => {
       </Stack>
 
       <Stack
-        mt={"2rem"}
-        direction={"row"}
-        justifyContent={"center"}
-        textAlign={"start"}
-        gap={"13rem"}
-        mr={"5rem"}
+        sx={{
+          mt: "2rem",
+          flexDirection: "row",
+          justifyContent: "center",
+          textAlign: "start",
+          gap: { xs: "3rem", md: "10rem" },
+        }}
       >
         <Stack>
           <Typography
@@ -105,12 +120,14 @@ const LocationDetails: FC = () => {
         Residents
       </Typography>
       <Grid container gap={2} mt={2} justifyContent={"center"}>
-        {Array.isArray(characters) ? (
-          <>
-            {characters?.map((character: Character) => (
-              <CharacterCard key={character.id} data={character} />
-            ))}
-          </>
+        {!location.residents.length ? (
+          <Typography variant="h4" fontWeight={400}>
+            No residents in this location.
+          </Typography>
+        ) : Array.isArray(characters) ? (
+          characters?.map((character: Character) => (
+            <CharacterCard key={character.id} data={character} />
+          ))
         ) : (
           <CharacterCard data={characters} />
         )}

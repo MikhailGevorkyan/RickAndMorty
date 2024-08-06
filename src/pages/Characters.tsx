@@ -5,6 +5,7 @@ import {
   Grid,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
   Stack,
@@ -17,7 +18,8 @@ import LoadMoreButton from "../components/buttons/LoadMoreButton";
 import SearchFilter from "../components/SearchFilter";
 import species from "../components/filterData/species";
 import type { Character } from "../components/interfaces/projectInterfaces";
-import DialogSelect from "../components/AdvancedFilters";
+import AdvancedFiltersCharacters from "../components/AdvancedFiltersCharacters";
+import LoadingIcon from "../components/logos/LoadingIcon";
 
 const Characters: FC = () => {
   const [search, setSearch] = useState("");
@@ -71,7 +73,7 @@ const Characters: FC = () => {
           mdWidth="15rem"
         />
         <FormControl
-          sx={{ display: { xs: "none", md: "block" }, width: "240px" }}
+          sx={{ display: { xs: "none", md: "block" }, width: "15rem" }}
         >
           <InputLabel
             htmlFor="species"
@@ -81,9 +83,13 @@ const Characters: FC = () => {
           </InputLabel>
           <Select
             value={speciesFilter}
+            input={<OutlinedInput label="Species" />}
             onChange={(e) => handleSpeciesChange(e)}
             sx={{ display: { xs: "none", md: "block" } }}
           >
+            <MenuItem value="">
+              <em>All</em>
+            </MenuItem>
             {species.map((specie) => (
               <MenuItem key={specie.id} value={specie.name}>
                 {specie.name}
@@ -92,7 +98,7 @@ const Characters: FC = () => {
           </Select>
         </FormControl>
         <FormControl
-          sx={{ display: { xs: "none", md: "block" }, width: "240px" }}
+          sx={{ display: { xs: "none", md: "block" }, width: "15rem" }}
         >
           <InputLabel
             htmlFor="gender"
@@ -102,9 +108,13 @@ const Characters: FC = () => {
           </InputLabel>
           <Select
             value={genderFilter}
+            input={<OutlinedInput label="Gender" />}
             onChange={(e) => handleGenderChange(e)}
             sx={{ display: { xs: "none", md: "block" } }}
           >
+            <MenuItem value="">
+              <em>All</em>
+            </MenuItem>
             <MenuItem value="female">Female</MenuItem>
             <MenuItem value="male">Male</MenuItem>
             <MenuItem value="genderless">Genderless</MenuItem>
@@ -112,7 +122,7 @@ const Characters: FC = () => {
           </Select>
         </FormControl>
         <FormControl
-          sx={{ display: { xs: "none", md: "block" }, width: "240px" }}
+          sx={{ display: { xs: "none", md: "block" }, width: "15rem" }}
         >
           <InputLabel
             htmlFor="status"
@@ -121,10 +131,14 @@ const Characters: FC = () => {
             Status
           </InputLabel>
           <Select
+            input={<OutlinedInput label="Status" />}
             value={statusFilter}
             onChange={(e) => handleStatusChange(e)}
             sx={{ display: { xs: "none", md: "block" } }}
           >
+            <MenuItem value="">
+              <em>All</em>
+            </MenuItem>
             <MenuItem value="alive">Alive</MenuItem>
             <MenuItem value="dead">Dead</MenuItem>
             <MenuItem value="unknown">Unknown</MenuItem>
@@ -132,14 +146,16 @@ const Characters: FC = () => {
         </FormControl>
       </Stack>
 
-      {/* <AdvancedFilters /> */}
-      <DialogSelect />
+      <AdvancedFiltersCharacters
+        setGenderFilter={setGenderFilter}
+        setSpeciesFilter={setSpeciesFilter}
+        setStatusFilter={setStatusFilter}
+        setFiltersChanged={setFiltersChanged}
+      />
 
       <Grid container gap={2} mt={6} justifyContent="center">
         {isLoading ? (
-          <Typography variant="h4" mt={4}>
-            Loading characters...
-          </Typography>
+          <LoadingIcon />
         ) : error ? (
           <Typography variant="h4" mt={4} color="error">
             No characters were found matching the selected filters.

@@ -16,7 +16,7 @@ const Footer = () => {
         flexGrow: 1,
       }}
     >
-      <Typography fontWeight={700} fontSize={"1.125rem"} fontFamily={"Karla"}>
+      <Typography fontWeight={700} fontFamily={"Karla"} textAlign={"center"}>
         Make with ❤️ for the MobProgramming team
       </Typography>
     </Box>

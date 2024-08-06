@@ -59,7 +59,7 @@ const DetailedEpisodeCard: FC<EpisodeCardProps> = ({ data }) => (
         mt: 2,
         mb: 1,
         ml: 0,
-        width: "24.625rem",
+        width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
         height: "1px",
         color: "#212121",
       }}
