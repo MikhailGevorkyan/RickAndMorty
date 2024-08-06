@@ -1,29 +1,32 @@
-import { Box, Container, Grid, InputAdornment, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
-import EpisodesLogo from "../components/EpisodesLogo";
-import { FC } from "react";
-import EpisodeCard from "../components/EpisodeCard";
+import { Container, Grid, Typography } from "@mui/material";
+import EpisodesLogo from "../components/logos/EpisodesLogo";
+import { FC, useEffect, useState } from "react";
+import EpisodeCard from "../components/cards/EpisodeCard";
 import { useGetEpisodesQuery } from "../features/api/apiSlice";
-import { Button } from "@mui/material";
-import LoadMoreButton from "../components/LoadMoreButton";
-
-interface Episode {
-  id: number;
-  name: string;
-  air_date: string;
-  episode: string;
-  characters: string[];
-  url: string;
-  created: string;
-}
+import LoadMoreButton from "../components/buttons/LoadMoreButton";
+import SearchFilter from "../components/SearchFilter";
+import type { Episode } from "../components/interfaces/projectInterfaces";
+import LoadingIcon from "../components/logos/LoadingIcon";
 
 const Episodes: FC = () => {
-  const { data, isLoading, error } = useGetEpisodesQuery({});
+  const [search, setSearch] = useState("");
+  const [pageCounter, setPageCounter] = useState(1);
+  const [filtersChanged, setFiltersChanged] = useState(false);
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error && error instanceof Error) {
-    console.log(error.message);
-  }
+  const {
+    data: episodes,
+    isLoading,
+    error,
+  } = useGetEpisodesQuery({
+    name: search,
+    page: pageCounter,
+  });
+
+  useEffect(() => {
+    if (filtersChanged) {
+      setFiltersChanged(false);
+    }
+  }, [search]);
 
   return (
     <Container
@@ -32,33 +35,38 @@ const Episodes: FC = () => {
       }}
     >
       <EpisodesLogo />
-      <TextField
-        placeholder="Filter by name or episode (ex. S01 or S01E02)"
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <SearchIcon />
-            </InputAdornment>
-          ),
-        }}
-        sx={{
-          marginTop: "1rem",
-          width: "25rem",
-        }}
+      <SearchFilter
+        setSearch={setSearch}
+        placeholder="Filter by name or episode (ex. S01)"
+        xsWidth="17.5rem"
+        mdWidth="25rem"
       />
 
       <Grid container gap={6} mt={6} justifyContent="center">
-        {data.results.map((episode: Episode) => (
-          <EpisodeCard
-            key={episode.id}
-            id={episode.id}
-            name={episode.name}
-            air_date={episode.air_date}
-            episode={episode.episode}
-          />
-        ))}
+        {isLoading ? (
+          <LoadingIcon />
+        ) : error ? (
+          <Typography variant="h4" mt={4} color="error">
+            No episodes were found matching the search request.
+          </Typography>
+        ) : episodes && episodes.results && episodes.results.length > 0 ? (
+          episodes.results.map((episode: Episode) => (
+            <EpisodeCard key={episode.id} data={episode} />
+          ))
+        ) : (
+          !isLoading &&
+          !error &&
+          search && (
+            <Typography variant="h4" mt={4}>
+              No episodes were found matching the search request.
+            </Typography>
+          )
+        )}
       </Grid>
-      <LoadMoreButton />
+      <LoadMoreButton
+        pageCounter={pageCounter}
+        setPageCounter={setPageCounter}
+      />
     </Container>
   );
 };

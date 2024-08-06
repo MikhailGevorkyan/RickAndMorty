@@ -5,7 +5,7 @@ const LocationsLogo = () => (
     component={"img"}
     src={"images/locations_logo.png"}
     sx={{
-      width: 326,
+      width: { xs: 250, md: 326 },
       margin: "2rem auto 0",
     }}
   />

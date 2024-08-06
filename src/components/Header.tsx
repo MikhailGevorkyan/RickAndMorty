@@ -1,39 +1,27 @@
-import {
-  Stack,
-  CardMedia,
-  AppBar,
-  Toolbar,
-  Box,
-  IconButton,
-} from "@mui/material";
+import { Stack, CardMedia, AppBar, Toolbar, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
-import { Dispatch, SetStateAction } from "react";
+import MenuDrawer from "./MenuDrawer";
 
-interface HeaderProps {
-  open: boolean;
-  setOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-const Header: React.FC<HeaderProps> = ({ setOpen, open }) => {
-  console.log(open);
+const Header: React.FC = () => {
   return (
     <Box component={"header"}>
       <AppBar position="static">
         <Toolbar
           sx={{
             display: "flex",
-            justifyContent: "space-around",
+            justifyContent: { xs: "space-between", md: "space-around" },
             boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 8px",
             backgroundColor: "white",
           }}
         >
-          <CardMedia
-            component={"img"}
-            src={"images/logo_black.png"}
-            sx={{ height: 40, width: 40 }}
-          />
+          <Link to={"/"}>
+            <CardMedia
+              component={"img"}
+              image="/images/logo_black.png"
+              sx={{ height: 40, width: 40 }}
+            />
+          </Link>
+
           <Box
             sx={{
               display: { sm: "block", xs: "none" },
@@ -83,16 +71,7 @@ const Header: React.FC<HeaderProps> = ({ setOpen, open }) => {
               display: { xs: "block", sm: "none" },
             }}
           >
-            <IconButton
-              size="large"
-              edge="start"
-              color="default"
-              aria-label="menu"
-              sx={{ mr: 2 }}
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <CloseIcon /> : <MenuIcon />}
-            </IconButton>
+            <MenuDrawer />
           </Box>
         </Toolbar>
       </AppBar>

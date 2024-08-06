@@ -6,7 +6,7 @@ const EpisodesLogo = () => (
     src={"/images/episodes_logo.png"}
     sx={{
       width: 267,
-      margin: "2rem auto 0",
+      margin: "2rem auto 1rem",
     }}
   />
 );

@@ -2,41 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Characters from "./pages/Characters";
-import Locations from "./pages/Locations";
-import Episodes from "./pages/Episodes";
+import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "./features/store";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
-        path: "/",
-        element: <Characters />,
-      },
-      {
-        path: "/locations",
-        element: <Locations />,
-      },
-      {
-        path: "/episodes",
-        element: <Episodes />,
-      },
-    ],
-  },
-]);
+import Layout from "./components/Layout";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <RouterProvider router={router} />
-    </Provider>
+    <BrowserRouter>
+      <Provider store={store}>
+        <Layout>
+          <App />
+        </Layout>
+      </Provider>
+    </BrowserRouter>
   </React.StrictMode>
 );

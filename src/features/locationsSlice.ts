@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import type { Location } from "../components/interfaces/projectInterfaces";
 
-const initialState = {
+const initialState: { locations: Location[] } = {
   locations: [],
 };
 
@@ -8,7 +9,7 @@ const locationsSlice = createSlice({
   name: "locations",
   initialState,
   reducers: {
-    updateLocations: (state, action) => {
+    updateLocations: (state, action: { payload: Location[] }) => {
       state.locations = action.payload;
     },
   },
