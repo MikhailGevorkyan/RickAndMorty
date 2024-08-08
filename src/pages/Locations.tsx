@@ -1,4 +1,4 @@
-import LocationsLogo from "../components/logos/LocationsLogo";
+import LocationsLogo from '../components/logos/LocationsLogo';
 import {
   Box,
   Container,
@@ -9,36 +9,41 @@ import {
   OutlinedInput,
   Select,
   SelectChangeEvent,
-  Typography,
-} from "@mui/material";
-import { FC, useEffect, useState } from "react";
-import LocationCard from "../components/cards/LocationCard";
-import { useGetLocationsQuery } from "../features/api/apiSlice";
-import AdvancedFiltersLocations from "../components/AdvancedFiltersLocations";
-import LoadMoreButton from "../components/buttons/LoadMoreButton";
-import SearchFilter from "../components/SearchFilter";
-import type { Location } from "../components/interfaces/projectInterfaces";
-import locationTypes from "../components/filterData/locationTypes";
-import locationDimensions from "../components/filterData/locationDimensions";
-import LoadingIcon from "../components/logos/LoadingIcon";
+} from '@mui/material';
+import { FC, useEffect, useState } from 'react';
+import AdvancedFiltersLocations from '../components/AdvancedFiltersLocations';
+import LoadMoreButton from '../components/buttons/LoadMoreButton';
+import SearchFilter from '../components/SearchFilter';
+import {
+  locationTypes,
+  locationDimensions,
+} from '../components/constants/constants';
+import { useQuery } from '@apollo/client';
+import { GET_LOCATIONS } from '../service/graphql/queries';
+import {
+  renderLoading,
+  renderError,
+  renderNoResults,
+  renderLocations,
+} from '../components/renderHelpers';
+import { Location } from '../__generated__/graphql';
 
 const Locations: FC = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [pageCounter, setPageCounter] = useState(1);
-  const [typesFilter, setTypesFilter] = useState("");
-  const [dimensionsFilter, setDimensionsFilter] = useState("");
+  const [typesFilter, setTypesFilter] = useState('');
+  const [dimensionsFilter, setDimensionsFilter] = useState('');
   const [filtersChanged, setFiltersChanged] = useState(false);
 
-  const {
-    data: locations,
-    isLoading,
-    error,
-  } = useGetLocationsQuery({
-    name: search,
-    page: pageCounter,
-    type: typesFilter,
-    dimension: dimensionsFilter,
+  const { data, loading, error, refetch, fetchMore } = useQuery(GET_LOCATIONS, {
+    variables: {
+      name: search,
+      type: typesFilter,
+      dimension: dimensionsFilter,
+    },
   });
+
+  const locations = data?.locations;
 
   const handleTypesChange = (event: SelectChangeEvent<string>) => {
     setTypesFilter(event.target.value);
@@ -52,9 +57,36 @@ const Locations: FC = () => {
 
   useEffect(() => {
     if (filtersChanged) {
+      refetch();
       setFiltersChanged(false);
     }
-  }, [search, typesFilter, dimensionsFilter]);
+  }, [filtersChanged, search, typesFilter, dimensionsFilter, refetch]);
+
+  const handleLoadMore = () => {
+    if (locations?.info?.next) {
+      fetchMore({
+        variables: {
+          page: locations.info.next,
+        },
+      }).then(() => {
+        setPageCounter(pageCounter + 1);
+      });
+    }
+  };
+
+  const renderContent = () => {
+    if (loading) {
+      return renderLoading();
+    } else if (error) {
+      return renderError();
+    } else if (locations && locations.results && locations.results.length > 0) {
+      return renderLocations(locations.results as Location[]);
+    } else {
+      return renderNoResults(
+        'No episodes found matching the selected filters.',
+      );
+    }
+  };
 
   return (
     <Container
@@ -65,10 +97,10 @@ const Locations: FC = () => {
       <LocationsLogo />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "1rem",
-          marginTop: "2rem",
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '1rem',
+          marginTop: '2rem',
         }}
       >
         <SearchFilter
@@ -79,14 +111,14 @@ const Locations: FC = () => {
         />
         <FormControl
           sx={{
-            display: { xs: "none", md: "block" },
-            width: "15rem",
+            display: { xs: 'none', md: 'block' },
+            width: '15rem',
           }}
         >
           <InputLabel
             htmlFor="type"
             sx={{
-              display: { xs: "none", md: "block" },
+              display: { xs: 'none', md: 'block' },
             }}
           >
             Type
@@ -96,7 +128,7 @@ const Locations: FC = () => {
             onChange={(e) => handleTypesChange(e)}
             input={<OutlinedInput label="Type" />}
             sx={{
-              display: { xs: "none", md: "block" },
+              display: { xs: 'none', md: 'flex' },
             }}
           >
             <MenuItem value="">
@@ -111,14 +143,14 @@ const Locations: FC = () => {
         </FormControl>
         <FormControl
           sx={{
-            display: { xs: "none", md: "block" },
-            width: "15rem",
+            display: { xs: 'none', md: 'block' },
+            width: '15rem',
           }}
         >
           <InputLabel
             htmlFor="dimension"
             sx={{
-              display: { xs: "none", md: "block" },
+              display: { xs: 'none', md: 'block' },
             }}
           >
             Dimension
@@ -128,7 +160,7 @@ const Locations: FC = () => {
             input={<OutlinedInput label="Dimension" />}
             onChange={(e) => handleDimensionsChange(e)}
             sx={{
-              display: { xs: "none", md: "block" },
+              display: { xs: 'none', md: 'flex' },
             }}
           >
             <MenuItem value="">
@@ -148,32 +180,12 @@ const Locations: FC = () => {
         setDimensionsFilter={setDimensionsFilter}
         setFiltersChanged={setFiltersChanged}
       />
-
       <Grid container gap={8} mt={6} justifyContent="center">
-        {isLoading ? (
-          <LoadingIcon />
-        ) : error ? (
-          <Typography variant="h4">
-            No locations were found matching the selected filters.
-          </Typography>
-        ) : locations && locations.results && locations.results.length > 0 ? (
-          locations.results.map((location: Location) => (
-            <LocationCard key={location.id} data={location} />
-          ))
-        ) : (
-          !isLoading &&
-          !error &&
-          (search || typesFilter || dimensionsFilter) && (
-            <Typography variant="h4" mt={4}>
-              No locations were found matching the selected filters.
-            </Typography>
-          )
-        )}
+        {renderContent()}
       </Grid>
-      <LoadMoreButton
-        pageCounter={pageCounter}
-        setPageCounter={setPageCounter}
-      />
+      {locations?.info?.next && (
+        <LoadMoreButton handleLoadMore={handleLoadMore} />
+      )}
     </Container>
   );
 };

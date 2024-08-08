@@ -1,7 +1,6 @@
-import { MenuItem } from "@mui/material";
+import { MenuItem } from '@mui/material';
 
 interface MenuItemCardProps {
-  id: number;
   name: string;
 }
 

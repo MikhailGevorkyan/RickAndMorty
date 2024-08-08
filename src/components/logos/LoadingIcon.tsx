@@ -1,8 +1,14 @@
-import { Box, CircularProgress } from "@mui/material";
-import type { FC } from "react";
+import { Box, CircularProgress } from '@mui/material';
 
 const LoadingIcon = () => (
-  <Box sx={{ display: "flex" }}>
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 'auto',
+    }}
+  >
     <CircularProgress />
   </Box>
 );

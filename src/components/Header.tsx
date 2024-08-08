@@ -1,22 +1,22 @@
-import { Stack, CardMedia, AppBar, Toolbar, Box } from "@mui/material";
-import { Link } from "react-router-dom";
-import MenuDrawer from "./MenuDrawer";
+import { Stack, CardMedia, AppBar, Toolbar, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
+import MenuDrawer from './MenuDrawer';
 
 const Header: React.FC = () => {
   return (
-    <Box component={"header"}>
+    <Box component={'header'}>
       <AppBar position="static">
         <Toolbar
           sx={{
-            display: "flex",
-            justifyContent: { xs: "space-between", md: "space-around" },
-            boxShadow: "rgba(0, 0, 0, 0.04) 0px 3px 8px",
-            backgroundColor: "white",
+            display: 'flex',
+            justifyContent: { xs: 'space-between', md: 'space-around' },
+            boxShadow: 'rgba(0, 0, 0, 0.04) 0px 3px 8px',
+            backgroundColor: 'white',
           }}
         >
-          <Link to={"/"}>
+          <Link to={'/'}>
             <CardMedia
-              component={"img"}
+              component={'img'}
               image="/images/logo_black.png"
               sx={{ height: 40, width: 40 }}
             />
@@ -24,42 +24,42 @@ const Header: React.FC = () => {
 
           <Box
             sx={{
-              display: { sm: "block", xs: "none" },
+              display: { sm: 'block', xs: 'none' },
             }}
           >
             <Stack spacing={1} direction="row" justifyContent="center" gap={2}>
               <Link
-                to={"/"}
+                to={'/'}
                 style={{
-                  color: "black",
-                  fontFamily: "Karla",
+                  color: 'black',
+                  fontFamily: 'Karla',
                   fontWeight: 700,
-                  fontSize: "1.125rem",
-                  textDecoration: "none",
+                  fontSize: '1.125rem',
+                  textDecoration: 'none',
                 }}
               >
                 Characters
               </Link>
               <Link
-                to={"/locations"}
+                to={'/locations'}
                 style={{
-                  color: "black",
-                  fontFamily: "Karla",
+                  color: 'black',
+                  fontFamily: 'Karla',
                   fontWeight: 700,
-                  fontSize: "1.125rem",
-                  textDecoration: "none",
+                  fontSize: '1.125rem',
+                  textDecoration: 'none',
                 }}
               >
                 Locations
               </Link>
               <Link
-                to={"/episodes"}
+                to={'/episodes'}
                 style={{
-                  color: "black",
-                  fontFamily: "Karla",
+                  color: 'black',
+                  fontFamily: 'Karla',
                   fontWeight: 700,
-                  fontSize: "1.125rem",
-                  textDecoration: "none",
+                  fontSize: '1.125rem',
+                  textDecoration: 'none',
                 }}
               >
                 Episodes
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
           </Box>
           <Box
             sx={{
-              display: { xs: "block", sm: "none" },
+              display: { xs: 'block', sm: 'none' },
             }}
           >
             <MenuDrawer />

@@ -1,20 +1,20 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { useState } from "react";
-import species from "./filterData/species";
-import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, Stack } from "@mui/material";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { useState } from 'react';
+import { species, genders, statuses } from './constants/constants';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton, Stack } from '@mui/material';
 
 const AdvancedFiltersCharacters = ({
   setSpeciesFilter,
@@ -28,9 +28,9 @@ const AdvancedFiltersCharacters = ({
   setFiltersChanged: (changed: boolean) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const [tempSpeciesFilter, setTempSpeciesFilter] = useState<string>("");
-  const [tempGenderFilter, setTempGenderFilter] = useState<string>("");
-  const [tempStatusFilter, setTempStatusFilter] = useState<string>("");
+  const [tempSpeciesFilter, setTempSpeciesFilter] = useState<string>('');
+  const [tempGenderFilter, setTempGenderFilter] = useState<string>('');
+  const [tempStatusFilter, setTempStatusFilter] = useState<string>('');
 
   const handleSpeciesChange = (event: SelectChangeEvent) => {
     setTempSpeciesFilter(event.target.value);
@@ -50,9 +50,9 @@ const AdvancedFiltersCharacters = ({
 
   const handleClose = (
     event: React.SyntheticEvent<unknown>,
-    reason?: string
+    reason?: string,
   ) => {
-    if (reason !== "backdropClick") {
+    if (reason !== 'backdropClick') {
       setOpen(false);
     }
   };
@@ -70,19 +70,19 @@ const AdvancedFiltersCharacters = ({
       <Button
         onClick={handleClickOpen}
         sx={{
-          display: { xs: "flex", md: "none" },
-          m: "1rem auto 0",
-          width: "19.5rem",
-          height: "3.5rem",
-          backgroundColor: "rgba(227, 242, 253, 1)",
-          color: "rgba(33, 150, 243, 1)",
+          display: { xs: 'flex', md: 'none' },
+          m: '1rem auto 0',
+          width: { xs: '18rem', sm: '19.5rem' },
+          height: '3.5rem',
+          backgroundColor: 'rgba(227, 242, 253, 1)',
+          color: 'rgba(33, 150, 243, 1)',
         }}
         startIcon={<FilterListIcon />}
       >
         Advanced Filters
       </Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <Stack direction={"row"} justifyContent={"space-between"} pr={"1.5rem"}>
+        <Stack direction={'row'} justifyContent={'space-between'} pr={'1.5rem'}>
           <DialogTitle>Filters</DialogTitle>
           <IconButton aria-label="delete" size="small" onClick={handleClose}>
             <CloseIcon />
@@ -92,10 +92,10 @@ const AdvancedFiltersCharacters = ({
           <Box
             component="form"
             sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              flexDirection: "column",
-              width: "17rem",
+              display: 'flex',
+              flexWrap: 'wrap',
+              flexDirection: 'column',
+              width: '17rem',
             }}
           >
             <FormControl sx={{ mb: 2, minWidth: 120 }}>
@@ -125,10 +125,11 @@ const AdvancedFiltersCharacters = ({
                 <MenuItem value="">
                   <em>All</em>
                 </MenuItem>
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-                <MenuItem value="genderless">Genderless</MenuItem>
-                <MenuItem value="genderless">Unknown</MenuItem>
+                {genders.map((gender) => (
+                  <MenuItem key={gender.id} value={gender.name}>
+                    {gender.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <FormControl sx={{ mb: 2, minWidth: 120 }}>
@@ -141,9 +142,11 @@ const AdvancedFiltersCharacters = ({
                 <MenuItem value="">
                   <em>All</em>
                 </MenuItem>
-                <MenuItem value="alive">Alive</MenuItem>
-                <MenuItem value="dead">Dead</MenuItem>
-                <MenuItem value="unknown">Unknown</MenuItem>
+                {statuses.map((status) => (
+                  <MenuItem key={status.id} value={status.name}>
+                    {status.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>
@@ -153,10 +156,10 @@ const AdvancedFiltersCharacters = ({
             variant="contained"
             onClick={handleApply}
             sx={{
-              bgcolor: "rgba(227, 242, 253, 1)",
-              color: "rgba(33, 150, 243, 1)",
-              width: "17.5rem",
-              m: "0 auto 1rem",
+              bgcolor: 'rgba(227, 242, 253, 1)',
+              color: 'rgba(33, 150, 243, 1)',
+              width: '17.5rem',
+              m: '0 auto 1rem',
             }}
           >
             Apply

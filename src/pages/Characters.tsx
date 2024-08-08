@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect } from 'react';
 import {
   Container,
   FormControl,
@@ -9,37 +9,44 @@ import {
   Select,
   SelectChangeEvent,
   Stack,
-  Typography,
-} from "@mui/material";
-import MainLogo from "../components/logos/MainLogo";
-import CharacterCard from "../components/cards/CharacterCard";
-import { useGetCharactersQuery } from "../features/api/apiSlice";
-import LoadMoreButton from "../components/buttons/LoadMoreButton";
-import SearchFilter from "../components/SearchFilter";
-import species from "../components/filterData/species";
-import type { Character } from "../components/interfaces/projectInterfaces";
-import AdvancedFiltersCharacters from "../components/AdvancedFiltersCharacters";
-import LoadingIcon from "../components/logos/LoadingIcon";
+} from '@mui/material';
+import MainLogo from '../components/logos/MainLogo';
+import LoadMoreButton from '../components/buttons/LoadMoreButton';
+import SearchFilter from '../components/SearchFilter';
+import { species, genders, statuses } from '../components/constants/constants';
+import AdvancedFiltersCharacters from '../components/AdvancedFiltersCharacters';
+import { useQuery } from '@apollo/client';
+import { Character } from '../__generated__/graphql';
+import { GET_CHARACTERS } from '../service/graphql/queries';
+import {
+  renderLoading,
+  renderError,
+  renderNoResults,
+  renderCharacters,
+} from '../components/renderHelpers';
 
 const Characters: FC = () => {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [pageCounter, setPageCounter] = useState(1);
-  const [speciesFilter, setSpeciesFilter] = useState("");
-  const [genderFilter, setGenderFilter] = useState("");
-  const [statusFilter, setStatusFilter] = useState("");
+  const [speciesFilter, setSpeciesFilter] = useState('');
+  const [genderFilter, setGenderFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const [filtersChanged, setFiltersChanged] = useState(false);
 
-  const {
-    data: characters,
-    isLoading,
-    error,
-  } = useGetCharactersQuery({
-    name: search,
-    page: pageCounter,
-    species: speciesFilter,
-    gender: genderFilter,
-    status: statusFilter,
-  });
+  const { data, loading, error, refetch, fetchMore } = useQuery(
+    GET_CHARACTERS,
+    {
+      variables: {
+        name: search,
+        species: speciesFilter,
+        gender: genderFilter,
+        status: statusFilter,
+        page: pageCounter,
+      },
+    },
+  );
+
+  const characters = data?.characters;
 
   const handleSpeciesChange = (event: SelectChangeEvent<string>) => {
     setSpeciesFilter(event.target.value);
@@ -58,9 +65,52 @@ const Characters: FC = () => {
 
   useEffect(() => {
     if (filtersChanged) {
+      refetch();
       setFiltersChanged(false);
     }
-  }, [search, speciesFilter, genderFilter, statusFilter]);
+  }, [
+    filtersChanged,
+    search,
+    speciesFilter,
+    genderFilter,
+    statusFilter,
+    refetch,
+  ]);
+
+  const handleLoadMore = () => {
+    if (characters?.info?.next) {
+      fetchMore({
+        variables: {
+          page: characters.info.next,
+        },
+      }).then(() => {
+        setPageCounter(pageCounter + 1);
+      });
+    }
+  };
+
+  const filteredCharacters = characters?.results.filter(
+    (character: Character) =>
+      speciesFilter ? character.species === speciesFilter : true,
+  );
+
+  const renderContent = () => {
+    if (loading) {
+      return renderLoading();
+    } else if (error) {
+      return renderError();
+    } else if (filteredCharacters?.length > 0) {
+      return renderCharacters(characters.results);
+    } else {
+      return renderNoResults(
+        'No characters found matching the selected filters.',
+      );
+    }
+  };
+
+  <Grid container gap={2} mt={6} justifyContent="center">
+    {renderContent()}
+  </Grid>;
 
   return (
     <Container sx={{ marginBottom: 13 }}>
@@ -73,19 +123,19 @@ const Characters: FC = () => {
           mdWidth="15rem"
         />
         <FormControl
-          sx={{ display: { xs: "none", md: "block" }, width: "15rem" }}
+          sx={{ display: { xs: 'none', md: 'block' }, width: '15rem' }}
         >
           <InputLabel
             htmlFor="species"
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{ display: { xs: 'none', md: 'block' } }}
           >
             Species
           </InputLabel>
           <Select
             value={speciesFilter}
             input={<OutlinedInput label="Species" />}
-            onChange={(e) => handleSpeciesChange(e)}
-            sx={{ display: { xs: "none", md: "block" } }}
+            onChange={handleSpeciesChange}
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             <MenuItem value="">
               <em>All</em>
@@ -98,50 +148,53 @@ const Characters: FC = () => {
           </Select>
         </FormControl>
         <FormControl
-          sx={{ display: { xs: "none", md: "block" }, width: "15rem" }}
+          sx={{ display: { xs: 'none', md: 'block' }, width: '15rem' }}
         >
           <InputLabel
             htmlFor="gender"
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{ display: { xs: 'none', md: 'block' } }}
           >
             Gender
           </InputLabel>
           <Select
             value={genderFilter}
             input={<OutlinedInput label="Gender" />}
-            onChange={(e) => handleGenderChange(e)}
-            sx={{ display: { xs: "none", md: "block" } }}
+            onChange={handleGenderChange}
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             <MenuItem value="">
               <em>All</em>
             </MenuItem>
-            <MenuItem value="female">Female</MenuItem>
-            <MenuItem value="male">Male</MenuItem>
-            <MenuItem value="genderless">Genderless</MenuItem>
-            <MenuItem value="unknown">Unknown</MenuItem>
+            {genders.map((gender) => (
+              <MenuItem key={gender.id} value={gender.name}>
+                {gender.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <FormControl
-          sx={{ display: { xs: "none", md: "block" }, width: "15rem" }}
+          sx={{ display: { xs: 'none', md: 'block' }, width: '15rem' }}
         >
           <InputLabel
             htmlFor="status"
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{ display: { xs: 'none', md: 'block' } }}
           >
             Status
           </InputLabel>
           <Select
             input={<OutlinedInput label="Status" />}
             value={statusFilter}
-            onChange={(e) => handleStatusChange(e)}
-            sx={{ display: { xs: "none", md: "block" } }}
+            onChange={handleStatusChange}
+            sx={{ display: { xs: 'none', md: 'flex' } }}
           >
             <MenuItem value="">
               <em>All</em>
             </MenuItem>
-            <MenuItem value="alive">Alive</MenuItem>
-            <MenuItem value="dead">Dead</MenuItem>
-            <MenuItem value="unknown">Unknown</MenuItem>
+            {statuses.map((status) => (
+              <MenuItem key={status.id} value={status.name}>
+                {status.name}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Stack>
@@ -154,32 +207,11 @@ const Characters: FC = () => {
       />
 
       <Grid container gap={2} mt={6} justifyContent="center">
-        {isLoading ? (
-          <LoadingIcon />
-        ) : error ? (
-          <Typography variant="h4" mt={4} color="error">
-            No characters were found matching the selected filters.
-          </Typography>
-        ) : characters &&
-          characters.results &&
-          characters.results.length > 0 ? (
-          characters.results.map((character: Character) => (
-            <CharacterCard key={character.id} data={character} />
-          ))
-        ) : (
-          !isLoading &&
-          !error &&
-          (search || speciesFilter || genderFilter || statusFilter) && (
-            <Typography variant="h4" mt={4}>
-              No characters found matching the selected filters.
-            </Typography>
-          )
-        )}
+        {renderContent()}
       </Grid>
-      <LoadMoreButton
-        pageCounter={pageCounter}
-        setPageCounter={setPageCounter}
-      />
+      {characters?.info?.next && (
+        <LoadMoreButton handleLoadMore={handleLoadMore} />
+      )}
     </Container>
   );
 };

@@ -1,9 +1,10 @@
-import { InputAdornment, TextField } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
+import { InputAdornment, TextField } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 interface SearchFilterProps {
   placeholder: string;
   xsWidth: string;
+  smWidth?: string;
   mdWidth: string;
   setSearch: (value: string) => void;
 }
@@ -11,6 +12,7 @@ interface SearchFilterProps {
 const SearchFilter = ({
   placeholder,
   xsWidth,
+  smWidth,
   mdWidth,
   setSearch,
 }: SearchFilterProps) => {
@@ -22,7 +24,7 @@ const SearchFilter = ({
     <TextField
       placeholder={placeholder}
       sx={{
-        width: { xs: xsWidth, md: mdWidth },
+        width: { xs: xsWidth, sm: smWidth, md: mdWidth },
       }}
       onChange={searchHandle}
       InputProps={{

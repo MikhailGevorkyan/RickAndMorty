@@ -1,21 +1,20 @@
-import * as React from "react";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import InputLabel from "@mui/material/InputLabel";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import { useState } from "react";
-import locationTypes from "./filterData/locationTypes";
-import locationDimensions from "./filterData/locationDimensions";
-import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, Stack } from "@mui/material";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import { useState } from 'react';
+import { locationTypes, locationDimensions } from './constants/constants';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton, Stack } from '@mui/material';
 
 const AdvancedFiltersLocations = ({
   setTypesFilter,
@@ -27,8 +26,8 @@ const AdvancedFiltersLocations = ({
   setFiltersChanged: (changed: boolean) => void;
 }) => {
   const [open, setOpen] = useState(false);
-  const [tempTypesFilter, setTempTypesFilter] = useState<string>("");
-  const [tempDimensionsFilter, setTempDimensionsFilter] = useState<string>("");
+  const [tempTypesFilter, setTempTypesFilter] = useState<string>('');
+  const [tempDimensionsFilter, setTempDimensionsFilter] = useState<string>('');
 
   const handleTypesChange = (event: SelectChangeEvent) => {
     setTempTypesFilter(event.target.value);
@@ -44,9 +43,9 @@ const AdvancedFiltersLocations = ({
 
   const handleClose = (
     event: React.SyntheticEvent<unknown>,
-    reason?: string
+    reason?: string,
   ) => {
-    if (reason !== "backdropClick") {
+    if (reason !== 'backdropClick') {
       setOpen(false);
     }
   };
@@ -63,19 +62,19 @@ const AdvancedFiltersLocations = ({
       <Button
         onClick={handleClickOpen}
         sx={{
-          display: { xs: "flex", md: "none" },
-          m: "1rem auto 0",
-          width: "19.5rem",
-          height: "3.5rem",
-          backgroundColor: "rgba(227, 242, 253, 1)",
-          color: "rgba(33, 150, 243, 1)",
+          display: { xs: 'flex', md: 'none' },
+          m: '1rem auto 0',
+          width: { xs: '17.5rem', sm: '19.5rem' },
+          height: '3.5rem',
+          backgroundColor: 'rgba(227, 242, 253, 1)',
+          color: 'rgba(33, 150, 243, 1)',
         }}
         startIcon={<FilterListIcon />}
       >
         Advanced Filters
       </Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
-        <Stack direction={"row"} justifyContent={"space-between"} pr={"1.5rem"}>
+        <Stack direction={'row'} justifyContent={'space-between'} pr={'1.5rem'}>
           <DialogTitle>Filters</DialogTitle>
           <IconButton aria-label="delete" size="small" onClick={handleClose}>
             <CloseIcon />
@@ -85,10 +84,10 @@ const AdvancedFiltersLocations = ({
           <Box
             component="form"
             sx={{
-              display: "flex",
-              flexWrap: "wrap",
-              flexDirection: "column",
-              width: "17rem",
+              display: 'flex',
+              flexWrap: 'wrap',
+              flexDirection: 'column',
+              width: '17rem',
             }}
           >
             <FormControl sx={{ mb: 2, minWidth: 120 }}>
@@ -132,10 +131,10 @@ const AdvancedFiltersLocations = ({
             variant="contained"
             onClick={handleApply}
             sx={{
-              bgcolor: "rgba(227, 242, 253, 1)",
-              color: "rgba(33, 150, 243, 1)",
-              width: "17.5rem",
-              m: "0 auto 1rem",
+              bgcolor: 'rgba(227, 242, 253, 1)',
+              color: 'rgba(33, 150, 243, 1)',
+              width: '17.5rem',
+              m: '0 auto 1rem',
             }}
           >
             Apply

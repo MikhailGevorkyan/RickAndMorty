@@ -1,18 +1,15 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { REACT_APP_BASE_URL } from "../../config";
-import { updateCharacters } from "../charactersSlice";
-import { updateLocations } from "../locationsSlice";
-import { updateEpisodes } from "../episodesSlice";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { REACT_APP_BASE_URL } from '../../config';
 import type {
   Character,
   Episode,
-} from "../../components/interfaces/projectInterfaces";
-import type { Location } from "../../components/interfaces/projectInterfaces";
+} from '../../components/interfaces/projectInterfaces';
+import type { Location } from '../../components/interfaces/projectInterfaces';
 
 const baseUrl = REACT_APP_BASE_URL;
 
 export const apiSlice = createApi({
-  reducerPath: "api",
+  reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
   endpoints: (builder) => ({
     getCharacters: builder.query({
@@ -54,7 +51,7 @@ export const apiSlice = createApi({
 
         return {
           url: `/character/`,
-          method: "GET",
+          method: 'GET',
           params: queryParams,
         };
       },
@@ -64,19 +61,8 @@ export const apiSlice = createApi({
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
       },
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          const data = result.data;
-          dispatch(updateCharacters(data.results));
-        } catch (err) {
-          console.error("Error in query fulfillment:", err);
-        }
-      },
     }),
     getLocations: builder.query({
-      // query: ({ name, page = 1 }: { name: string; page: number }) =>
-      //   `/location/?page=${page}&name=${name}`,
       query: ({
         name,
         page = 1,
@@ -108,7 +94,7 @@ export const apiSlice = createApi({
 
         return {
           url: `/location/`,
-          method: "GET",
+          method: 'GET',
           params: queryParams,
         };
       },
@@ -117,15 +103,6 @@ export const apiSlice = createApi({
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
-      },
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          const data = result.data;
-          dispatch(updateLocations(data));
-        } catch (err) {
-          console.error("Error in query fulfillment:", err);
-        }
       },
     }),
     getEpisodes: builder.query({
@@ -136,15 +113,6 @@ export const apiSlice = createApi({
       },
       forceRefetch({ currentArg, previousArg }) {
         return currentArg !== previousArg;
-      },
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          const data = result.data;
-          dispatch(updateEpisodes(data));
-        } catch (err) {
-          console.error("Error in query fulfillment:", err);
-        }
       },
     }),
     getCharacterById: builder.query<Character, number | null>({

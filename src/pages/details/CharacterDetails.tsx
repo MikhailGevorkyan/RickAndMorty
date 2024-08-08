@@ -5,63 +5,59 @@ import {
   Divider,
   Stack,
   Typography,
-} from "@mui/material";
-import { FC } from "react";
-import {
-  useGetCharacterByIdQuery,
-  useGetEpisodesByIdQuery,
-} from "../../features/api/apiSlice";
-import { Link, useParams } from "react-router-dom";
-import IconButton from "@mui/material/IconButton";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import GoBackButton from "../../components/buttons/GoBackButton";
-import { Episode } from "../../components/interfaces/projectInterfaces";
-import DetailedEpisodeCard from "../../components/cards/DetailedEpisodeCard";
-import LoadingIcon from "../../components/logos/LoadingIcon";
+  IconButton,
+} from '@mui/material';
+import { FC } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useQuery } from '@apollo/client';
+import GoBackButton from '../../components/buttons/GoBackButton';
+import DetailedEpisodeCard from '../../components/cards/DetailedEpisodeCard';
+import LoadingIcon from '../../components/logos/LoadingIcon';
+import { Episode } from '../../__generated__/graphql';
+import { GET_CHARACTER_BY_ID } from '../../service/graphql/queries';
 
 const CharacterDetails: FC = () => {
-  const { id } = useParams();
-  const {
-    data: character,
-    isLoading,
-    error,
-  } = useGetCharacterByIdQuery(Number(id) || null);
+  const params = useParams();
 
-  const characterEpisodes = character?.episode.map((ep) => {
-    const urlParts = ep.split("/");
-    return urlParts[urlParts.length - 1];
+  const { data, loading, error } = useQuery(GET_CHARACTER_BY_ID, {
+    variables: { trackID: params.id! },
   });
 
-  const { data: episodes, isLoading: loadEpisodes } = useGetEpisodesByIdQuery(
-    characterEpisodes || null
-  );
-
-  if (isLoading || loadEpisodes) return <LoadingIcon />;
+  if (loading) return <LoadingIcon />;
   if (error) return <h1>Error...</h1>;
-  if (!character) return <h1>Empty character...</h1>;
-  if (!episodes) return <h1>Empty episodes...</h1>;
+  if (!data || !data.character) return <h1>Empty character...</h1>;
+
+  const { character } = data;
+
+  const characterInfo = [
+    { id: 1, label: 'Gender', value: character.gender },
+    { id: 2, label: 'Status', value: character.status },
+    { id: 3, label: 'Species', value: character.species },
+    { id: 4, label: 'Origin', value: character.origin.name },
+    { id: 5, label: 'Type', value: character.type || 'Unknown' },
+  ];
 
   return (
-    <Container sx={{ mb: "7rem" }}>
+    <Container sx={{ mb: '7rem' }}>
       <Box
         sx={{
-          position: "absolute",
-          left: { xs: "5%", md: "20%" },
-          top: { xs: "8%", md: "10%" },
+          position: 'absolute',
+          left: { xs: '5%', md: '20%' },
+          top: { xs: '8%', md: '10%' },
         }}
       >
         <GoBackButton name="characters" />
       </Box>
-
       <Stack
         sx={{
-          flexDirection: { md: "row" },
-          alignItems: "center",
-          justifyContent: "center",
-          mt: "2rem",
+          flexDirection: { md: 'row' },
+          alignItems: 'center',
+          justifyContent: 'center',
+          mt: '2rem',
         }}
       >
-        <Stack>
+        <Stack alignItems={'center'}>
           <Avatar
             alt={`${character.name} Avatar`}
             src={character.image}
@@ -70,217 +66,91 @@ const CharacterDetails: FC = () => {
               width: { xs: 148, md: 350 },
               height: { xs: 148, md: 350 },
               mt: 3,
-              border: "6px solid #e9eff0",
+              border: '6px solid #e9eff0',
             }}
           />
           <Typography
             variant="h1"
-            fontSize={{ xs: "2rem", md: "3rem" }}
-            mt={1}
+            fontSize={{ xs: '2rem', md: '3rem' }}
+            mt={2}
             fontWeight={400}
           >
             {character.name}
           </Typography>
         </Stack>
       </Stack>
-      <Stack mt={"2rem"} direction={{ xs: "column", md: "row" }}>
+
+      <Stack
+        mt={'3rem'}
+        direction={{ xs: 'column', md: 'row' }}
+        justifyContent={'center'}
+      >
         <Stack mb="3rem">
           <Typography
             sx={{
-              color: "#8E8E93",
-              fontSize: "1.25rem",
+              color: '#8E8E93',
+              fontSize: '1.25rem',
               fontWeight: 500,
-              mb: "1rem",
-              textAlign: { xs: "start", sm: "inherit" },
+              mb: '1rem',
+              textAlign: { xs: 'start', sm: 'inherit' },
             }}
           >
             Informations
           </Typography>
+
+          {characterInfo.map(({ id, label, value }) => (
+            <Box key={id}>
+              <Stack
+                sx={{
+                  textAlign: 'start',
+                  ml: { xs: 2, md: 30 },
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: '#081F32',
+                    fontWeight: 700,
+                  }}
+                >
+                  {label}
+                </Typography>
+                <Typography
+                  sx={{
+                    color: '#6E798C',
+                    fontWeight: 400,
+                    fontSize: '0.825rem',
+                  }}
+                >
+                  {value}
+                </Typography>
+              </Stack>
+              <Divider
+                variant="middle"
+                sx={{
+                  mt: 1,
+                  mb: 1,
+                  ml: { xs: 3, md: 30 },
+                  width: { xs: '18rem', sm: '20rem', md: '24.625rem' },
+                  height: '1px',
+                }}
+              />
+            </Box>
+          ))}
+
           <Stack
-            sx={{
-              textAlign: "start",
-              ml: { xs: 2, md: 30 },
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#081F32",
-                fontWeight: 700,
-              }}
-            >
-              Gender
-            </Typography>
-            <Typography
-              sx={{
-                color: "#6E798C",
-                fontWeight: 400,
-                fontSize: "0.825rem",
-              }}
-            >
-              {character.gender}
-            </Typography>
-          </Stack>
-          <Divider
-            variant="middle"
-            sx={{
-              mt: 1,
-              mb: 1,
-              ml: { xs: 2, md: 30 },
-              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
-              height: "1px",
-            }}
-          />
-          <Stack
-            sx={{
-              textAlign: "start",
-              ml: { xs: 2, md: 30 },
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#081F32",
-                fontWeight: 700,
-              }}
-            >
-              Status
-            </Typography>
-            <Typography
-              sx={{
-                color: "#6E798C",
-                fontWeight: 400,
-                fontSize: "0.825rem",
-              }}
-            >
-              {character.status}
-            </Typography>
-          </Stack>
-          <Divider
-            variant="middle"
-            sx={{
-              mt: 1,
-              mb: 1,
-              ml: { xs: 3, md: 30 },
-              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
-              height: "1px",
-            }}
-          />
-          <Stack
-            sx={{
-              textAlign: "start",
-              ml: { xs: 2, md: 30 },
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#081F32",
-                fontWeight: 700,
-              }}
-            >
-              Specie
-            </Typography>
-            <Typography
-              sx={{
-                color: "#6E798C",
-                fontWeight: 400,
-                fontSize: "0.825rem",
-              }}
-            >
-              {character.species}
-            </Typography>
-          </Stack>
-          <Divider
-            variant="middle"
-            sx={{
-              mt: 1,
-              mb: 1,
-              ml: { xs: 3, md: 30 },
-              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
-              height: "1px",
-            }}
-          />
-          <Stack
-            sx={{
-              textAlign: "start",
-              ml: { xs: 2, md: 30 },
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#081F32",
-                fontWeight: 700,
-              }}
-            >
-              Origin
-            </Typography>
-            <Typography
-              sx={{
-                color: "#6E798C",
-                fontWeight: 400,
-                fontSize: "0.825rem",
-              }}
-            >
-              {character.origin.name[0].toUpperCase() +
-                character.origin.name.slice(1)}
-            </Typography>
-          </Stack>
-          <Divider
-            variant="middle"
-            sx={{
-              mt: 1,
-              mb: 1,
-              ml: { xs: 3, md: 30 },
-              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
-              height: "1px",
-            }}
-          />
-          <Stack
-            sx={{
-              textAlign: "start",
-              ml: { xs: 2, md: 30 },
-            }}
-          >
-            <Typography
-              sx={{
-                color: "#081F32",
-                fontWeight: 700,
-              }}
-            >
-              Type
-            </Typography>
-            <Typography
-              sx={{
-                color: "#6E798C",
-                fontWeight: 400,
-                fontSize: "0.825rem",
-              }}
-            >
-              {!character.type ? "Unknown" : character.type}
-            </Typography>
-          </Stack>
-          <Divider
-            variant="middle"
-            sx={{
-              mt: 1,
-              mb: 1,
-              ml: { xs: 2, md: 30 },
-              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
-              height: "1px",
-            }}
-          />
-          <Stack
-            direction={"row"}
-            justifyContent={"space-between"}
-            paddingRight={"1rem"}
+            direction={'row'}
+            justifyContent={'space-between'}
+            paddingRight={'1rem'}
           >
             <Stack
               sx={{
-                textAlign: "start",
+                textAlign: 'start',
                 ml: { xs: 2, md: 30 },
               }}
             >
               <Typography
                 sx={{
-                  color: "#081F32",
+                  color: '#081F32',
                   fontWeight: 700,
                 }}
               >
@@ -288,63 +158,61 @@ const CharacterDetails: FC = () => {
               </Typography>
               <Typography
                 sx={{
-                  color: "#6E798C",
+                  color: '#6E798C',
                   fontWeight: 400,
-                  fontSize: "0.825rem",
+                  fontSize: '0.825rem',
                 }}
               >
                 {character.location.name}
               </Typography>
             </Stack>
             <Link
-              to={`/location/${character.location.url.split("/").pop()}`}
-              style={{ alignSelf: "center" }}
+              to={`/location/${character.location.id}`}
+              style={{ alignSelf: 'center' }}
             >
               <IconButton aria-label="link" size="small">
                 <ArrowForwardIosIcon fontSize="inherit" />
               </IconButton>
             </Link>
           </Stack>
-
           <Divider
             variant="middle"
             sx={{
               mt: 1,
               mb: 1,
               ml: { xs: 2, md: 30 },
-              width: { xs: "18rem", sm: "20rem", md: "24.625rem" },
-              height: "1px",
+              width: { xs: '18rem', sm: '20rem', md: '24.625rem' },
+              height: '1px',
             }}
           />
         </Stack>
         <Stack
           sx={{
-            ml: { md: "12.5rem" },
+            ml: { md: '5.5rem' },
           }}
         >
           <Typography
             variant="h6"
-            color={"#8E8E93"}
-            fontSize={"1.25rem"}
+            color={'#8E8E93'}
+            fontSize={'1.25rem'}
             fontWeight={500}
-            textAlign={"start"}
-            mb={"1rem"}
+            textAlign={'start'}
+            mb={'1rem'}
           >
             Episodes
           </Typography>
           <Stack
             sx={{
-              textAlign: "start",
+              textAlign: 'start',
               gap: 0.3,
               ml: { xs: 2 },
             }}
           >
-            {Array.isArray(episodes) ? (
-              episodes?.map((episode: Episode) => (
-                <DetailedEpisodeCard key={episode.id} data={episode} />
-              ))
-            ) : (
-              <DetailedEpisodeCard data={episodes} />
+            {character.episode.map(
+              (episode: Episode) =>
+                episode && (
+                  <DetailedEpisodeCard key={episode.id} episode={episode} />
+                ),
             )}
           </Stack>
         </Stack>
